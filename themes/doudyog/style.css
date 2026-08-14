@@ -2,8 +2,14 @@
 Theme Name: Do Udyog
 Template: dogalaxy-core
 Theme URI: https://github.com/DrDeveshK/DoGalaxy
-Author: DrDeveshK
-Description: A digital operating centre for MSMEs and growing businesses.
-Version: 0.1.0
+Author: Dr. Devesh Kumar Sharma
+Description: Digital operating centre for MSMEs — identity, compliance and growth.
+Version: 1.0.0
 Text Domain: doudyog
 */
+
+.dg-udyog-hero {
+  background:
+    radial-gradient(900px 420px at 90% -10%, rgba(196, 92, 38, 0.14), transparent 60%),
+    var(--wp--preset--color--paper);
+}

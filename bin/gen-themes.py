@@ -5,6 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 products = json.loads((ROOT / "products.json").read_text())
+ELITE = {"doudyog", "dovishram", "dorojgar", "doswagat", "dorishta", "dobajar", "mydoapp"}
 
 
 def php_cpt(c):
@@ -23,6 +24,8 @@ def php_cpt(c):
 
 
 for slug, p in products.items():
+    if slug in ELITE:
+        continue
     d = ROOT / "themes" / slug
     (d / "templates").mkdir(parents=True, exist_ok=True)
     name = p["name"]

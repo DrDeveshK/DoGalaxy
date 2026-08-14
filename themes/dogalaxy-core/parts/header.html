@@ -1,8 +1,15 @@
-<!-- wp:group {"layout":{"type":"constrained"}} -->
-<div class="wp-block-group">
-  <!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","flexWrap":"wrap"}} -->
+<!-- wp:group {"className":"dg-site-header","layout":{"type":"constrained"}} -->
+<div class="wp-block-group dg-site-header">
+  <!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","flexWrap":"wrap","verticalAlignment":"center"}} -->
   <div class="wp-block-group">
-    <!-- wp:site-title {"level":0} /-->
+    <!-- wp:group {"layout":{"type":"flex","orientation":"vertical"}} -->
+    <div class="wp-block-group">
+      <!-- wp:paragraph {"className":"dg-kicker","fontSize":"xs"} -->
+      <p class="dg-kicker has-xs-font-size"><a href="https://mydoapp.com">Do Galaxy</a></p>
+      <!-- /wp:paragraph -->
+      <!-- wp:site-title {"level":0} /-->
+    </div>
+    <!-- /wp:group -->
     <!-- wp:navigation {"overlayMenu":"mobile"} /-->
   </div>
   <!-- /wp:group -->

@@ -12,7 +12,7 @@ Do Universe
  Supporting: Dr Devesh · AgileHub
 ```
 
-Showcase (for Shri Akshit Singh Ji): [docs/PORTFOLIO.md](docs/PORTFOLIO.md).
+Showcase: [docs/PORTFOLIO.md](docs/PORTFOLIO.md). Elite rebuild order: [docs/BUILD.md](docs/BUILD.md).
 
 ## Host
 

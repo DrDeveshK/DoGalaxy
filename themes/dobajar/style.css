@@ -2,8 +2,14 @@
 Theme Name: Do Bajar
 Template: dogalaxy-core
 Theme URI: https://github.com/DrDeveshK/DoGalaxy
-Author: DrDeveshK
-Description: A digital marketplace connecting sellers, products and everyday buyers.
-Version: 0.1.0
+Author: Dr. Devesh Kumar Sharma
+Description: The commerce layer of Do Galaxy. Businesses from Do Udyog get storefronts; buyers discover products in a structured bazaar.
+Version: 1.0.0
 Text Domain: dobajar
 */
+
+.dg-dobajar-hero {
+  background:
+    radial-gradient(900px 420px at 90% -10%, #c4a03533, transparent 60%),
+    var(--wp--preset--color--paper);
+}

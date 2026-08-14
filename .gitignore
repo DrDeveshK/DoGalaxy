@@ -1,6 +1,8 @@
 .DS_Store
 .env
 .env.local
+cpanel.env
+*.env
 *.log
 node_modules/
 vendor/

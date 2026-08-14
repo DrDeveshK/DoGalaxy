@@ -2,8 +2,14 @@
 Theme Name: Do Rishta
 Template: dogalaxy-core
 Theme URI: https://github.com/DrDeveshK/DoGalaxy
-Author: DrDeveshK
-Description: A trusted, family-friendly platform for meaningful matrimonial connections.
-Version: 0.1.0
+Author: Dr. Devesh Kumar Sharma
+Description: Respectful matrimonial discovery — verification, relevance and room for families to participate.
+Version: 1.0.0
 Text Domain: dorishta
 */
+
+.dg-dorishta-hero {
+  background:
+    radial-gradient(900px 420px at 90% -10%, #a85a7a33, transparent 60%),
+    var(--wp--preset--color--paper);
+}

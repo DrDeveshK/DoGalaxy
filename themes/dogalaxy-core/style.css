@@ -1,9 +1,151 @@
 /*
 Theme Name: DoGalaxy Core
 Theme URI: https://github.com/DrDeveshK/DoGalaxy
-Author: DrDeveshK
-Description: Shared block theme for DoGalaxy WordPress products on HostingRaja.
-Version: 0.1.0
+Author: Dr. Devesh Kumar Sharma
+Description: Shared elite block theme for the Do Galaxy universe.
+Version: 1.0.0
 License: GPLv2 or later
 Text Domain: dogalaxy
 */
+
+.dg-kicker {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--wp--preset--color--saffron);
+}
+
+.dg-lede {
+  font-size: 1.15rem;
+  color: var(--wp--preset--color--ink-soft);
+  max-width: 40rem;
+}
+
+.dg-hero {
+  padding: clamp(3.5rem, 8vw, 6.5rem) 0 clamp(2.5rem, 5vw, 4rem);
+}
+
+.dg-band {
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
+}
+
+.dg-band-alt {
+  background: var(--wp--preset--color--paper-2);
+}
+
+.dg-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.dg-btn-ghost .wp-block-button__link {
+  background: transparent;
+  color: var(--wp--preset--color--ink);
+  border: 1px solid var(--wp--preset--color--ink);
+}
+
+.dg-stats {
+  margin-top: 3rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--wp--preset--color--line);
+}
+
+.dg-stats h3 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+}
+
+.dg-stats p {
+  margin: 0.25rem 0 0;
+  color: var(--wp--preset--color--ink-soft);
+  font-size: 0.88rem;
+}
+
+.dg-card {
+  height: 100%;
+  background: var(--wp--preset--color--white);
+  border: 1px solid var(--wp--preset--color--line);
+  border-radius: 18px;
+  padding: 1.4rem 1.35rem 1.5rem;
+}
+
+.dg-card h3 {
+  margin: 0.35rem 0 0.4rem;
+}
+
+.dg-mark {
+  display: inline-flex;
+  width: 2.1rem;
+  height: 2.1rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--wp--preset--color--paper-2);
+  color: var(--wp--preset--color--forest);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.dg-site-header,
+.dg-site-footer {
+  padding-top: 1.1rem;
+  padding-bottom: 1.1rem;
+}
+
+.dg-site-header {
+  border-bottom: 1px solid var(--wp--preset--color--line);
+  background: color-mix(in srgb, var(--wp--preset--color--paper) 88%, white);
+}
+
+.dg-site-footer {
+  margin-top: 3rem;
+  border-top: 1px solid var(--wp--preset--color--line);
+  color: var(--wp--preset--color--ink-soft);
+  font-size: 0.9rem;
+}
+
+.dg-galaxy-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.1rem;
+}
+
+.dg-form input,
+.dg-form textarea,
+.dg-form select {
+  width: 100%;
+  margin: 0.35rem 0 0.9rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--wp--preset--color--line);
+  border-radius: 12px;
+  background: var(--wp--preset--color--white);
+  font: inherit;
+}
+
+.dg-form button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.85rem 1.4rem;
+  background: var(--wp--preset--color--ink);
+  color: var(--wp--preset--color--paper);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.dg-notice {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: #e7f0e6;
+}
+
+@media (max-width: 781px) {
+  .dg-stats .wp-block-columns {
+    gap: 1.1rem;
+  }
+}

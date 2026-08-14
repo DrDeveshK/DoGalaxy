@@ -3,39 +3,103 @@
   "version": 3,
   "settings": {
     "appearanceTools": true,
+    "useRootPaddingAwareAlignments": true,
     "layout": {
-      "contentSize": "720px",
-      "wideSize": "1120px"
+      "contentSize": "760px",
+      "wideSize": "1180px"
+    },
+    "spacing": {
+      "units": ["px", "rem", "vw", "%"],
+      "spacingScale": { "steps": 8 }
     },
     "color": {
       "palette": [
-        { "slug": "ink", "color": "#1a1714", "name": "Ink" },
-        { "slug": "sand", "color": "#f6f1e8", "name": "Sand" },
-        { "slug": "forest", "color": "#2f4a3c", "name": "Forest" },
-        { "slug": "clay", "color": "#b85c38", "name": "Clay" }
+        { "slug": "ink", "color": "#14110e", "name": "Ink" },
+        { "slug": "ink-soft", "color": "#3d3832", "name": "Ink soft" },
+        { "slug": "paper", "color": "#f4efe6", "name": "Paper" },
+        { "slug": "paper-2", "color": "#ebe4d6", "name": "Paper 2" },
+        { "slug": "white", "color": "#fffcf7", "name": "White" },
+        { "slug": "forest", "color": "#1e3a2f", "name": "Forest" },
+        { "slug": "saffron", "color": "#c45c26", "name": "Saffron" },
+        { "slug": "gold", "color": "#b8954a", "name": "Gold" },
+        { "slug": "line", "color": "#d9d0c0", "name": "Line" }
       ]
     },
     "typography": {
+      "fluid": true,
       "fontFamilies": [
+        {
+          "slug": "display",
+          "name": "Display",
+          "fontFamily": "\"Fraunces\", \"Iowan Old Style\", Georgia, serif"
+        },
         {
           "slug": "sans",
           "name": "Sans",
-          "fontFamily": "Inter, system-ui, sans-serif"
+          "fontFamily": "\"Figtree\", ui-sans-serif, system-ui, sans-serif"
         }
+      ],
+      "fontSizes": [
+        { "slug": "xs", "size": "0.75rem", "name": "XS" },
+        { "slug": "sm", "size": "0.9rem", "name": "SM" },
+        { "slug": "md", "size": "1.05rem", "name": "MD" },
+        { "slug": "lg", "size": "1.25rem", "name": "LG", "fluid": { "min": "1.1rem", "max": "1.35rem" } },
+        { "slug": "xl", "size": "2rem", "name": "XL", "fluid": { "min": "1.6rem", "max": "2.4rem" } },
+        { "slug": "xxl", "size": "3.4rem", "name": "XXL", "fluid": { "min": "2.2rem", "max": "4rem" } }
       ]
     }
   },
   "styles": {
     "color": {
-      "background": "var(--wp--preset--color--sand)",
+      "background": "var(--wp--preset--color--paper)",
       "text": "var(--wp--preset--color--ink)"
     },
     "typography": {
-      "fontFamily": "var(--wp--preset--font-family--sans)"
+      "fontFamily": "var(--wp--preset--font-family--sans)",
+      "fontSize": "var(--wp--preset--font-size--md)",
+      "lineHeight": "1.65"
+    },
+    "spacing": {
+      "blockGap": "1.25rem",
+      "padding": { "top": "0", "right": "1.25rem", "bottom": "0", "left": "1.25rem" }
     },
     "elements": {
+      "h1": {
+        "typography": {
+          "fontFamily": "var(--wp--preset--font-family--display)",
+          "fontWeight": "560",
+          "lineHeight": "1.12",
+          "letterSpacing": "-0.02em",
+          "fontSize": "var(--wp--preset--font-size--xxl)"
+        }
+      },
+      "h2": {
+        "typography": {
+          "fontFamily": "var(--wp--preset--font-family--display)",
+          "fontWeight": "560",
+          "lineHeight": "1.2",
+          "fontSize": "var(--wp--preset--font-size--xl)"
+        }
+      },
+      "h3": {
+        "typography": {
+          "fontFamily": "var(--wp--preset--font-family--display)",
+          "fontWeight": "550",
+          "lineHeight": "1.25"
+        }
+      },
       "link": {
-        "color": { "text": "var(--wp--preset--color--forest)" }
+        "color": { "text": "var(--wp--preset--color--forest)" },
+        ":hover": { "color": { "text": "var(--wp--preset--color--saffron)" } }
+      },
+      "button": {
+        "border": { "radius": "999px" },
+        "color": {
+          "background": "var(--wp--preset--color--ink)",
+          "text": "var(--wp--preset--color--paper)"
+        },
+        "typography": { "fontWeight": "600", "fontSize": "0.95rem" },
+        "spacing": { "padding": { "top": "0.85rem", "right": "1.4rem", "bottom": "0.85rem", "left": "1.4rem" } }
       }
     }
   },

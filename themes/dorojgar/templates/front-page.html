@@ -1,14 +1,149 @@
 <!-- wp:template-part {"slug":"header","tagName":"header"} /-->
 
-<!-- wp:group {"tagName":"main","layout":{"type":"constrained"}} -->
+<!-- wp:group {"tagName":"main"} -->
 <main class="wp-block-group">
-  <!-- wp:heading {"level":1} -->
-  <h1>A hyperlocal employment marketplace connecting people with opportunity.</h1>
-  <!-- /wp:heading -->
-  <!-- wp:paragraph -->
-  <p>Part of DoGalaxy · <a href="https://kusumit.com">Kusumit</a></p>
-  <!-- /wp:paragraph -->
-  <!-- wp:post-content /-->
+
+<!-- wp:group {"className":"dg-hero dg-dorojgar-hero","layout":{"type":"constrained"}} -->
+<div class="wp-block-group dg-hero dg-dorojgar-hero">
+  <!-- wp:paragraph {"className":"dg-kicker"} --><p class="dg-kicker">रोज़गार आपके पास</p><!-- /wp:paragraph -->
+  <!-- wp:heading {"level":1} --><h1>Hyperlocal jobs. Real opportunities.</h1><!-- /wp:heading -->
+  <!-- wp:paragraph {"className":"dg-lede"} --><p class="dg-lede">Local jobs, skilled work, office roles and gigs — closer to seekers, simpler for employers.</p><!-- /wp:paragraph -->
+  <!-- wp:buttons {"className":"dg-actions"} -->
+  <div class="wp-block-buttons dg-actions">
+    <!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#enquire">I am hiring</a></div><!-- /wp:button -->
+    <!-- wp:button {"className":"dg-btn-ghost"} --><div class="wp-block-button dg-btn-ghost"><a class="wp-block-button__link wp-element-button" href="/jobs/">Find a job</a></div><!-- /wp:button -->
+  </div>
+  <!-- /wp:buttons -->
+  <!-- wp:columns {"className":"dg-stats"} -->
+  <div class="wp-block-columns dg-stats">
+    <!-- wp:column -->
+    <div class="wp-block-column"><!-- wp:heading {"level":3} --><h3>3,400+</h3><!-- /wp:heading --><!-- wp:paragraph --><p>Job posts</p><!-- /wp:paragraph --></div>
+    <!-- /wp:column -->
+    <!-- wp:column -->
+    <div class="wp-block-column"><!-- wp:heading {"level":3} --><h3>90+</h3><!-- /wp:heading --><!-- wp:paragraph --><p>Towns</p><!-- /wp:paragraph --></div>
+    <!-- /wp:column -->
+    <!-- wp:column -->
+    <div class="wp-block-column"><!-- wp:heading {"level":3} --><h3>2</h3><!-- /wp:heading --><!-- wp:paragraph --><p>Journeys</p><!-- /wp:paragraph --></div>
+    <!-- /wp:column -->
+    <!-- wp:column -->
+    <div class="wp-block-column"><!-- wp:heading {"level":3} --><h3>6</h3><!-- /wp:heading --><!-- wp:paragraph --><p>Do products</p><!-- /wp:paragraph --></div>
+    <!-- /wp:column -->
+  </div>
+  <!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"dg-band dg-band-alt alignfull","layout":{"type":"constrained"}} -->
+<div class="wp-block-group dg-band dg-band-alt alignfull">
+  <!-- wp:heading {"level":2} --><h2>How Do Rojgar works</h2><!-- /wp:heading -->
+  <!-- wp:columns -->
+  <div class="wp-block-columns">
+    <!-- wp:column -->
+    <div class="wp-block-column">
+      <!-- wp:group {"className":"dg-card"} -->
+      <div class="wp-block-group dg-card">
+        <!-- wp:paragraph {"className":"dg-mark"} --><p class="dg-mark">01</p><!-- /wp:paragraph -->
+        <!-- wp:heading {"level":3} --><h3>Job search</h3><!-- /wp:heading -->
+        <!-- wp:paragraph --><p>Roles near you — shop floor, office, gig and skilled work.</p><!-- /wp:paragraph -->
+      </div>
+      <!-- /wp:group -->
+    </div>
+    <!-- /wp:column -->
+    <!-- wp:column -->
+    <div class="wp-block-column">
+      <!-- wp:group {"className":"dg-card"} -->
+      <div class="wp-block-group dg-card">
+        <!-- wp:paragraph {"className":"dg-mark"} --><p class="dg-mark">02</p><!-- /wp:paragraph -->
+        <!-- wp:heading {"level":3} --><h3>Employer posting</h3><!-- /wp:heading -->
+        <!-- wp:paragraph --><p>A simple channel for SMEs to find relevant people.</p><!-- /wp:paragraph -->
+      </div>
+      <!-- /wp:group -->
+    </div>
+    <!-- /wp:column -->
+    <!-- wp:column -->
+    <div class="wp-block-column">
+      <!-- wp:group {"className":"dg-card"} -->
+      <div class="wp-block-group dg-card">
+        <!-- wp:paragraph {"className":"dg-mark"} --><p class="dg-mark">03</p><!-- /wp:paragraph -->
+        <!-- wp:heading {"level":3} --><h3>Two dashboards</h3><!-- /wp:heading -->
+        <!-- wp:paragraph --><p>Seeker and employer journeys, not one generic board.</p><!-- /wp:paragraph -->
+      </div>
+      <!-- /wp:group -->
+    </div>
+    <!-- /wp:column -->
+  </div>
+  <!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"dg-band","layout":{"type":"constrained"}} -->
+<div class="wp-block-group dg-band">
+  <!-- wp:heading {"level":2} --><h2>Featured jobs</h2><!-- /wp:heading -->
+  <!-- wp:query {"query":{"perPage":6,"postType":"job","inherit":false}} -->
+  <div class="wp-block-query">
+    <!-- wp:post-template {"layout":{"type":"grid","columnCount":2}} -->
+      <!-- wp:group {"className":"dg-card"} -->
+      <div class="wp-block-group dg-card">
+        <!-- wp:post-title {"isLink":true,"level":3} /-->
+        <!-- wp:post-excerpt /-->
+      </div>
+      <!-- /wp:group -->
+    <!-- /wp:post-template -->
+  </div>
+  <!-- /wp:query -->
+  <!-- wp:paragraph --><p><a href="/jobs/">See all jobs</a></p><!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"dg-band","layout":{"type":"constrained"}} -->
+<div class="wp-block-group dg-band">
+  <!-- wp:heading {"level":2} --><h2>Connected across Do Galaxy</h2><!-- /wp:heading -->
+  <!-- wp:columns -->
+  <div class="wp-block-columns">
+      <!-- wp:column -->
+      <div class="wp-block-column">
+        <!-- wp:group {"className":"dg-card"} -->
+        <div class="wp-block-group dg-card">
+          <!-- wp:heading {"level":3} --><h3>Hire for a business</h3><!-- /wp:heading -->
+          <!-- wp:paragraph --><p>Verified firms start on Do Udyog. <a href="https://doudyog.com">Open</a></p><!-- /wp:paragraph -->
+        </div>
+        <!-- /wp:group -->
+      </div>
+      <!-- /wp:column -->
+      <!-- wp:column -->
+      <div class="wp-block-column">
+        <!-- wp:group {"className":"dg-card"} -->
+        <div class="wp-block-group dg-card">
+          <!-- wp:heading {"level":3} --><h3>Event crews</h3><!-- /wp:heading -->
+          <!-- wp:paragraph --><p>Staff weddings and functions via Do Swagat. <a href="https://doswagat.com">Open</a></p><!-- /wp:paragraph -->
+        </div>
+        <!-- /wp:group -->
+      </div>
+      <!-- /wp:column -->
+      <!-- wp:column -->
+      <div class="wp-block-column">
+        <!-- wp:group {"className":"dg-card"} -->
+        <div class="wp-block-group dg-card">
+          <!-- wp:heading {"level":3} --><h3>Sell your skills</h3><!-- /wp:heading -->
+          <!-- wp:paragraph --><p>Service businesses also list on Do Bajar. <a href="https://dobajar.com">Open</a></p><!-- /wp:paragraph -->
+        </div>
+        <!-- /wp:group -->
+      </div>
+      <!-- /wp:column -->
+  </div>
+  <!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"anchor":"enquire","className":"dg-band dg-band-alt alignfull","layout":{"type":"constrained"}} -->
+<div class="wp-block-group dg-band dg-band-alt alignfull" id="enquire">
+  <!-- wp:heading {"level":2} --><h2>Talk to Do Rojgar</h2><!-- /wp:heading -->
+  <!-- wp:shortcode -->
+  [do_enquiry]
+  <!-- /wp:shortcode -->
+</div>
+<!-- /wp:group -->
+
 </main>
 <!-- /wp:group -->
 

@@ -2,7 +2,16 @@
 
 Repo: [DrDeveshK/DoGalaxy](https://github.com/DrDeveshK/DoGalaxy)
 
-## Once on the server (SSH / cPanel Terminal)
+## From this machine (preferred)
+
+cPanel → **Security → Manage API Tokens** → create `cursor-dogalaxy` → put the token in `~/.config/dogalaxy/cpanel.env` (see `cpanel.env.example`).
+
+```bash
+python3 bin/cpanel.py ping
+python3 bin/cpanel.py deploy doswagat
+```
+
+## Once on the server (cPanel Terminal — SSH is closed)
 
 ```bash
 cd ~
