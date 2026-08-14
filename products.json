@@ -1,0 +1,141 @@
+{
+  "kusumit": {
+    "domain": "kusumit.com",
+    "docroot": "/home/koloconi/public_html",
+    "name": "KUSUMIT",
+    "tagline": "IT company hub — MaD teams for web, app, and enterprise delivery.",
+    "cpt": []
+  },
+  "kusumit-org": {
+    "domain": "kusumit.org",
+    "docroot": "/home/koloconi/kusumit.org",
+    "name": "Kusumit.org",
+    "tagline": "Social service and society welfare.",
+    "cpt": []
+  },
+  "doswagat": {
+    "domain": "doswagat.com",
+    "docroot": "/home/koloconi/doswagat.com",
+    "name": "DoSwagat",
+    "tagline": "Plan weddings, parties and corporate events with verified partners.",
+    "cpt": [
+      { "key": "venue", "plural": "Venues", "singular": "Venue", "slug": "venues", "icon": "dashicons-location" },
+      { "key": "event_service", "plural": "Services", "singular": "Service", "slug": "services", "icon": "dashicons-awards" },
+      { "key": "event_package", "plural": "Packages", "singular": "Package", "slug": "packages", "icon": "dashicons-tickets-alt" }
+    ]
+  },
+  "doaaram": {
+    "domain": "doaaram.com",
+    "docroot": "/home/koloconi/doaaram.com",
+    "name": "DoAaram",
+    "tagline": "Open service platform for day-to-day needs.",
+    "cpt": [
+      { "key": "local_service", "plural": "Services", "singular": "Service", "slug": "services", "icon": "dashicons-admin-tools" }
+    ]
+  },
+  "donirman": {
+    "domain": "donirman.com",
+    "docroot": "/home/koloconi/donirman.com",
+    "name": "DoNirman",
+    "tagline": "Build smarter, build sahi.",
+    "cpt": [
+      { "key": "contractor", "plural": "Contractors", "singular": "Contractor", "slug": "contractors", "icon": "dashicons-hammer" },
+      { "key": "project", "plural": "Projects", "singular": "Project", "slug": "projects", "icon": "dashicons-building" }
+    ]
+  },
+  "dorishta": {
+    "domain": "dorishta.com",
+    "docroot": "/home/koloconi/dorishta.com",
+    "name": "DoRishta",
+    "tagline": "Apna rishta dhundho — yahan.",
+    "cpt": [
+      { "key": "success_story", "plural": "Success Stories", "singular": "Story", "slug": "stories", "icon": "dashicons-heart" }
+    ]
+  },
+  "dorojgar": {
+    "domain": "dorojgar.com",
+    "docroot": "/home/koloconi/dorojgar.com",
+    "name": "DoRojgar",
+    "tagline": "Hyperlocal jobs. Real opportunities.",
+    "cpt": [
+      { "key": "job", "plural": "Jobs", "singular": "Job", "slug": "jobs", "icon": "dashicons-id" }
+    ]
+  },
+  "doudyog": {
+    "domain": "doudyog.com",
+    "docroot": "/home/koloconi/doudyog.com",
+    "name": "DoUdyog",
+    "tagline": "Build, verify and grow your business.",
+    "cpt": [
+      { "key": "business", "plural": "Businesses", "singular": "Business", "slug": "businesses", "icon": "dashicons-store" }
+    ]
+  },
+  "dovishram": {
+    "domain": "dovishram.com",
+    "docroot": "/home/koloconi/dovishram.com",
+    "name": "DoVishram",
+    "tagline": "Find peaceful stays, rooms, resorts and retreats.",
+    "cpt": [
+      { "key": "stay", "plural": "Stays", "singular": "Stay", "slug": "stay", "icon": "dashicons-admin-home" }
+    ]
+  },
+  "dovyapaar": {
+    "domain": "dovyapaar.com",
+    "docroot": "/home/koloconi/dovyapaar.com",
+    "name": "DoVyapaar",
+    "tagline": "Find suppliers, post RFQs and grow your vyapaar.",
+    "cpt": [
+      { "key": "supplier", "plural": "Suppliers", "singular": "Supplier", "slug": "suppliers", "icon": "dashicons-groups" },
+      { "key": "trade_lead", "plural": "Trade Leads", "singular": "Lead", "slug": "leads", "icon": "dashicons-megaphone" }
+    ]
+  },
+  "aspirant": {
+    "domain": "aspirant.kusumit.com",
+    "docroot": "/home/koloconi/aspirant.kusumit.com",
+    "name": "Aspirant",
+    "tagline": "Igniting the minds — programs and learning by KUSUMIT.",
+    "cpt": [
+      { "key": "course", "plural": "Programs", "singular": "Program", "slug": "programs", "icon": "dashicons-welcome-learn-more" }
+    ]
+  },
+  "agilehub": {
+    "domain": "agilehub.org",
+    "docroot": "/home/koloconi/agilehub.org",
+    "name": "Agile Hub",
+    "tagline": "MaD Agile — events, courses, community.",
+    "cpt": [
+      { "key": "hub_event", "plural": "Events", "singular": "Event", "slug": "events", "icon": "dashicons-calendar-alt" },
+      { "key": "hub_course", "plural": "Courses", "singular": "Course", "slug": "courses", "icon": "dashicons-welcome-learn-more" }
+    ]
+  },
+  "drdevesh": {
+    "domain": "drdevesh.com",
+    "docroot": "/home/koloconi/drdevesh.com",
+    "name": "Dr Devesh",
+    "tagline": "Enterprise program manager. Business, agility, life, research.",
+    "cpt": []
+  },
+  "shoppingkirana": {
+    "domain": "shoppingkirana.com",
+    "docroot": "/home/koloconi/shoppingkirana.com",
+    "name": "Shopping Kirana",
+    "tagline": "Neighborhood kirana, online.",
+    "cpt": [
+      { "key": "kirana_item", "plural": "Items", "singular": "Item", "slug": "items", "icon": "dashicons-cart" }
+    ]
+  },
+  "rkitc": {
+    "domain": "rkitc.org",
+    "docroot": "/home/koloconi/rkitc.org",
+    "name": "RKITC",
+    "tagline": "Organization site.",
+    "cpt": []
+  },
+  "kolocon": {
+    "domain": "kolocon.com",
+    "docroot": "/home/koloconi/public_html/kolocon.com",
+    "name": "Kolocon",
+    "tagline": "Kolocon.",
+    "cpt": []
+  }
+}
