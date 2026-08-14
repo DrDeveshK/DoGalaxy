@@ -1,6 +1,18 @@
 # Elite rebuild — one product at a time
 
-Current generated themes are stubs. Each product is rebuilt as a full WordPress block experience, then deployed.
+Themes are not the product. Each vertical is a **plugin + UI**: register, login, dashboard, directory, workflows, enquiries.
+
+Each vertical is a plugin + UI. MyDoApp is the hub.
+
+| App | Live |
+|---|---|
+| Do Udyog | doudyog.com |
+| Do Vishram | dovishram.com |
+| Do Rojgar | dorojgar.com |
+| Do Swagat | doswagat.com |
+| Do Rishta | dorishta.com |
+| Do Bajar | in repo (needs WP + DB slot) |
+| MyDoApp | mydoapp.kusumit.com (hub); mydoapp.com when addon+WP exist |
 
 ## Standard (every product)
 

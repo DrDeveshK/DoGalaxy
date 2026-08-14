@@ -227,6 +227,78 @@ add_action('init', function () {{
     print(f"activation plugin uploaded for {slug}")
 
 
+def cmd_app(env, args):
+    """Deploy plugin + classic theme for a product slug (doudyog)."""
+    slug = args.slug
+    products = json.loads((ROOT / "products.json").read_text())
+    if slug not in products:
+        sys.exit(f"unknown slug: {slug}")
+    p = products[slug]
+    plugin = ROOT / "plugins" / f"{slug}-app"
+    theme = ROOT / "themes" / slug
+    if not plugin.exists() or not theme.exists():
+        sys.exit(f"need {plugin} and {theme}")
+    dest_themes = f"{p['docroot']}/wp-content/themes"
+    dest_plugins = f"{p['docroot']}/wp-content/plugins"
+    with tempfile.TemporaryDirectory() as td:
+        zpath = Path(td) / f"{slug}-app.zip"
+        with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
+            for src, arc in ((theme, f"themes/{slug}"), (plugin, f"plugins/{slug}-app")):
+                for f in src.rglob("*"):
+                    if f.is_file():
+                        z.write(f, f"{arc}/{f.relative_to(src)}")
+        api2(env, "Fileman", "mkdir", path="/home/koloconi", name="tmp")
+        upload(env, zpath, "/home/koloconi/tmp", f"{slug}-app.zip")
+    api2(env, "Fileman", "fileop", op="extract",
+         sourcefiles=f"/home/koloconi/tmp/{slug}-app.zip",
+         destfiles=f"{p['docroot']}/wp-content")
+    php = f"""<?php
+add_action('init', function () {{
+    if (get_option('dogalaxy_app_boot_{slug}')) {{
+        return;
+    }}
+    require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    activate_plugin('{slug}-app/{slug}-app.php');
+    switch_theme('{slug}');
+    $boot = '{slug}_activate';
+    if (function_exists($boot)) {{
+        $boot();
+    }}
+    update_option('dogalaxy_app_boot_{slug}', 1);
+}}, 0);
+"""
+    with tempfile.TemporaryDirectory() as td:
+        f = Path(td) / f"boot-{slug}.php"
+        f.write_text(php)
+        api2(env, "Fileman", "mkdir", path=f"{p['docroot']}/wp-content", name="mu-plugins")
+        upload(env, f, f"{p['docroot']}/wp-content/mu-plugins", f"boot-{slug}.php")
+    print(f"app deployed + bootstrapped: {slug}")
+
+
+def cmd_standalone(env, args):
+    """Upload standalone MyDoApp to a cPanel directory."""
+    src = ROOT / "standalone" / "mydoapp"
+    dest = args.dest
+    with tempfile.TemporaryDirectory() as td:
+        zpath = Path(td) / "mydoapp-standalone.zip"
+        with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
+            for f in src.rglob("*"):
+                if f.is_file():
+                    z.write(f, f.relative_to(src))
+        api2(env, "Fileman", "mkdir", path="/home/koloconi", name="tmp")
+        upload(env, zpath, "/home/koloconi/tmp", "mydoapp-standalone.zip")
+    api2(env, "Fileman", "mkdir", path="/home/koloconi", name=Path(dest).name)
+    api2(
+        env,
+        "Fileman",
+        "fileop",
+        op="extract",
+        sourcefiles="/home/koloconi/tmp/mydoapp-standalone.zip",
+        destfiles=dest,
+    )
+    print("standalone MyDoApp →", dest)
+
+
 def cmd_git_clone(env, _):
     out = uapi(
         env,
@@ -261,6 +333,10 @@ def main():
     p.add_argument("slug")
     p = sub.add_parser("activate")
     p.add_argument("slug")
+    p = sub.add_parser("app")
+    p.add_argument("slug")
+    p = sub.add_parser("standalone")
+    p.add_argument("dest")
     sub.add_parser("git-clone")
     args = ap.parse_args()
     env = load_env()
@@ -272,6 +348,8 @@ def main():
         "upload": cmd_upload,
         "deploy": cmd_deploy,
         "activate": cmd_activate,
+        "app": cmd_app,
+        "standalone": cmd_standalone,
         "git-clone": cmd_git_clone,
     }[args.cmd](env, args)
 
