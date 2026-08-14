@@ -1,133 +1,305 @@
 {
+  "mydoapp": {
+    "domain": "mydoapp.com",
+    "docroot": "/home/koloconi/mydoapp.com",
+    "name": "MyDoApp",
+    "brand": "MyDoApp",
+    "role": "Parent digital platform",
+    "tier": "platform",
+    "tagline": "The common platform connecting every Do service.",
+    "cpt": [],
+    "purpose": "Parent digital platform of Do Universe."
+  },
+  "doudyog": {
+    "domain": "doudyog.com",
+    "docroot": "/home/koloconi/doudyog.com",
+    "name": "Do Udyog",
+    "brand": "Do Udyog",
+    "role": "Business identity, compliance and MSME growth",
+    "tier": "vertical",
+    "tagline": "A digital operating centre for MSMEs and growing businesses.",
+    "cpt": [
+      {
+        "key": "business",
+        "plural": "Businesses",
+        "singular": "Business",
+        "slug": "businesses",
+        "icon": "dashicons-store"
+      }
+    ],
+    "sector": "Industry & Business",
+    "purpose": "Trusted business identity plus structured support for compliance, operations and growth.",
+    "potential": "Entry point for jobs, services, customers and commerce across Do Galaxy."
+  },
+  "dovishram": {
+    "domain": "dovishram.com",
+    "docroot": "/home/koloconi/dovishram.com",
+    "name": "Do Vishram",
+    "brand": "Do Vishram",
+    "role": "Discovery of stays and curated rest experiences",
+    "tier": "vertical",
+    "tagline": "A trusted discovery platform for stays and curated rest experiences.",
+    "cpt": [
+      {
+        "key": "stay",
+        "plural": "Stays",
+        "singular": "Stay",
+        "slug": "stay",
+        "icon": "dashicons-admin-home"
+      }
+    ],
+    "sector": "Rest, Stays & Wellness",
+    "purpose": "Hotels, homestays, resorts, short stays and packaged rest for travellers, families and professionals.",
+    "potential": "Regional network of verified stays and wellness-led hospitality."
+  },
+  "dorojgar": {
+    "domain": "dorojgar.com",
+    "docroot": "/home/koloconi/dorojgar.com",
+    "name": "Do Rojgar",
+    "brand": "Do Rojgar",
+    "role": "Hyperlocal jobs and employer\u2013candidate connection",
+    "tier": "vertical",
+    "tagline": "A hyperlocal employment marketplace connecting people with opportunity.",
+    "cpt": [
+      {
+        "key": "job",
+        "plural": "Jobs",
+        "singular": "Job",
+        "slug": "jobs",
+        "icon": "dashicons-id"
+      }
+    ],
+    "sector": "Employment",
+    "purpose": "Local jobs and gigs for seekers; a simple hiring channel for employers.",
+    "potential": "Bridge local skills and local demand for SMEs and frontline roles."
+  },
+  "doswagat": {
+    "domain": "doswagat.com",
+    "docroot": "/home/koloconi/doswagat.com",
+    "name": "Do Swagat",
+    "brand": "Do Swagat",
+    "role": "Event planning and hospitality-service discovery",
+    "tier": "vertical",
+    "tagline": "A coordinated marketplace for celebrations, events and hospitality services.",
+    "cpt": [
+      {
+        "key": "venue",
+        "plural": "Venues",
+        "singular": "Venue",
+        "slug": "venues",
+        "icon": "dashicons-location"
+      },
+      {
+        "key": "event_service",
+        "plural": "Services",
+        "singular": "Service",
+        "slug": "services",
+        "icon": "dashicons-awards"
+      },
+      {
+        "key": "event_package",
+        "plural": "Packages",
+        "singular": "Package",
+        "slug": "packages",
+        "icon": "dashicons-tickets-alt"
+      }
+    ],
+    "sector": "Welcome, Events & Hospitality",
+    "purpose": "Weddings, parties and corporate events \u2014 venues and trusted partners in one flow.",
+    "potential": "End-to-end planning, booking and partner management."
+  },
+  "dorishta": {
+    "domain": "dorishta.com",
+    "docroot": "/home/koloconi/dorishta.com",
+    "name": "Do Rishta",
+    "brand": "Do Rishta",
+    "role": "Verified, family-friendly matrimonial discovery",
+    "tier": "vertical",
+    "tagline": "A trusted, family-friendly platform for meaningful matrimonial connections.",
+    "cpt": [
+      {
+        "key": "success_story",
+        "plural": "Success Stories",
+        "singular": "Story",
+        "slug": "stories",
+        "icon": "dashicons-heart"
+      }
+    ],
+    "sector": "Relationships & Matrimony",
+    "purpose": "Respectful partner discovery centred on trust, verification and relevance.",
+    "potential": "Trust, regional depth, family participation, guided discovery."
+  },
+  "dobajar": {
+    "domain": "dobajar.com",
+    "docroot": "/home/koloconi/dobajar.com",
+    "name": "Do Bajar",
+    "brand": "Do Bajar",
+    "role": "Seller visibility, product discovery and commerce",
+    "tier": "vertical",
+    "tagline": "A digital marketplace connecting sellers, products and everyday buyers.",
+    "cpt": [
+      {
+        "key": "listing",
+        "plural": "Listings",
+        "singular": "Listing",
+        "slug": "listings",
+        "icon": "dashicons-cart"
+      }
+    ],
+    "sector": "Marketplace & Commerce",
+    "purpose": "Seller visibility and structured product discovery; commerce layer for Do Udyog.",
+    "potential": "From digital identity to customer reach and transactions."
+  },
+  "drdevesh": {
+    "domain": "drdevesh.com",
+    "docroot": "/home/koloconi/drdevesh.com",
+    "name": "Dr Devesh",
+    "brand": "Dr Devesh",
+    "role": "Founder personal brand",
+    "tier": "support",
+    "tagline": "Enterprise program manager. Business, agility, life, research.",
+    "cpt": []
+  },
+  "agilehub": {
+    "domain": "agilehub.org",
+    "docroot": "/home/koloconi/agilehub.org",
+    "name": "AgileHub",
+    "brand": "AgileHub",
+    "role": "Agile professional community",
+    "tier": "support",
+    "tagline": "MaD Agile \u2014 events, courses, community.",
+    "cpt": [
+      {
+        "key": "hub_event",
+        "plural": "Events",
+        "singular": "Event",
+        "slug": "events",
+        "icon": "dashicons-calendar-alt"
+      },
+      {
+        "key": "hub_course",
+        "plural": "Courses",
+        "singular": "Course",
+        "slug": "courses",
+        "icon": "dashicons-welcome-learn-more"
+      }
+    ]
+  },
   "kusumit": {
     "domain": "kusumit.com",
     "docroot": "/home/koloconi/public_html",
     "name": "KUSUMIT",
-    "tagline": "IT company hub — MaD teams for web, app, and enterprise delivery.",
+    "tier": "legacy",
+    "tagline": "IT company hub \u2014 MaD teams for web, app, and enterprise delivery.",
     "cpt": []
   },
   "kusumit-org": {
     "domain": "kusumit.org",
     "docroot": "/home/koloconi/kusumit.org",
     "name": "Kusumit.org",
+    "tier": "legacy",
     "tagline": "Social service and society welfare.",
     "cpt": []
-  },
-  "doswagat": {
-    "domain": "doswagat.com",
-    "docroot": "/home/koloconi/doswagat.com",
-    "name": "DoSwagat",
-    "tagline": "Plan weddings, parties and corporate events with verified partners.",
-    "cpt": [
-      { "key": "venue", "plural": "Venues", "singular": "Venue", "slug": "venues", "icon": "dashicons-location" },
-      { "key": "event_service", "plural": "Services", "singular": "Service", "slug": "services", "icon": "dashicons-awards" },
-      { "key": "event_package", "plural": "Packages", "singular": "Package", "slug": "packages", "icon": "dashicons-tickets-alt" }
-    ]
   },
   "doaaram": {
     "domain": "doaaram.com",
     "docroot": "/home/koloconi/doaaram.com",
     "name": "DoAaram",
+    "tier": "legacy",
     "tagline": "Open service platform for day-to-day needs.",
     "cpt": [
-      { "key": "local_service", "plural": "Services", "singular": "Service", "slug": "services", "icon": "dashicons-admin-tools" }
+      {
+        "key": "local_service",
+        "plural": "Services",
+        "singular": "Service",
+        "slug": "services",
+        "icon": "dashicons-admin-tools"
+      }
     ]
   },
   "donirman": {
     "domain": "donirman.com",
     "docroot": "/home/koloconi/donirman.com",
     "name": "DoNirman",
+    "tier": "legacy",
     "tagline": "Build smarter, build sahi.",
     "cpt": [
-      { "key": "contractor", "plural": "Contractors", "singular": "Contractor", "slug": "contractors", "icon": "dashicons-hammer" },
-      { "key": "project", "plural": "Projects", "singular": "Project", "slug": "projects", "icon": "dashicons-building" }
-    ]
-  },
-  "dorishta": {
-    "domain": "dorishta.com",
-    "docroot": "/home/koloconi/dorishta.com",
-    "name": "DoRishta",
-    "tagline": "Apna rishta dhundho — yahan.",
-    "cpt": [
-      { "key": "success_story", "plural": "Success Stories", "singular": "Story", "slug": "stories", "icon": "dashicons-heart" }
-    ]
-  },
-  "dorojgar": {
-    "domain": "dorojgar.com",
-    "docroot": "/home/koloconi/dorojgar.com",
-    "name": "DoRojgar",
-    "tagline": "Hyperlocal jobs. Real opportunities.",
-    "cpt": [
-      { "key": "job", "plural": "Jobs", "singular": "Job", "slug": "jobs", "icon": "dashicons-id" }
-    ]
-  },
-  "doudyog": {
-    "domain": "doudyog.com",
-    "docroot": "/home/koloconi/doudyog.com",
-    "name": "DoUdyog",
-    "tagline": "Build, verify and grow your business.",
-    "cpt": [
-      { "key": "business", "plural": "Businesses", "singular": "Business", "slug": "businesses", "icon": "dashicons-store" }
-    ]
-  },
-  "dovishram": {
-    "domain": "dovishram.com",
-    "docroot": "/home/koloconi/dovishram.com",
-    "name": "DoVishram",
-    "tagline": "Find peaceful stays, rooms, resorts and retreats.",
-    "cpt": [
-      { "key": "stay", "plural": "Stays", "singular": "Stay", "slug": "stay", "icon": "dashicons-admin-home" }
+      {
+        "key": "contractor",
+        "plural": "Contractors",
+        "singular": "Contractor",
+        "slug": "contractors",
+        "icon": "dashicons-hammer"
+      },
+      {
+        "key": "project",
+        "plural": "Projects",
+        "singular": "Project",
+        "slug": "projects",
+        "icon": "dashicons-building"
+      }
     ]
   },
   "dovyapaar": {
     "domain": "dovyapaar.com",
     "docroot": "/home/koloconi/dovyapaar.com",
     "name": "DoVyapaar",
+    "tier": "legacy",
     "tagline": "Find suppliers, post RFQs and grow your vyapaar.",
     "cpt": [
-      { "key": "supplier", "plural": "Suppliers", "singular": "Supplier", "slug": "suppliers", "icon": "dashicons-groups" },
-      { "key": "trade_lead", "plural": "Trade Leads", "singular": "Lead", "slug": "leads", "icon": "dashicons-megaphone" }
+      {
+        "key": "supplier",
+        "plural": "Suppliers",
+        "singular": "Supplier",
+        "slug": "suppliers",
+        "icon": "dashicons-groups"
+      },
+      {
+        "key": "trade_lead",
+        "plural": "Trade Leads",
+        "singular": "Lead",
+        "slug": "leads",
+        "icon": "dashicons-megaphone"
+      }
     ]
   },
   "aspirant": {
     "domain": "aspirant.kusumit.com",
     "docroot": "/home/koloconi/aspirant.kusumit.com",
     "name": "Aspirant",
-    "tagline": "Igniting the minds — programs and learning by KUSUMIT.",
+    "tier": "legacy",
+    "tagline": "Igniting the minds \u2014 programs and learning by KUSUMIT.",
     "cpt": [
-      { "key": "course", "plural": "Programs", "singular": "Program", "slug": "programs", "icon": "dashicons-welcome-learn-more" }
+      {
+        "key": "course",
+        "plural": "Programs",
+        "singular": "Program",
+        "slug": "programs",
+        "icon": "dashicons-welcome-learn-more"
+      }
     ]
-  },
-  "agilehub": {
-    "domain": "agilehub.org",
-    "docroot": "/home/koloconi/agilehub.org",
-    "name": "Agile Hub",
-    "tagline": "MaD Agile — events, courses, community.",
-    "cpt": [
-      { "key": "hub_event", "plural": "Events", "singular": "Event", "slug": "events", "icon": "dashicons-calendar-alt" },
-      { "key": "hub_course", "plural": "Courses", "singular": "Course", "slug": "courses", "icon": "dashicons-welcome-learn-more" }
-    ]
-  },
-  "drdevesh": {
-    "domain": "drdevesh.com",
-    "docroot": "/home/koloconi/drdevesh.com",
-    "name": "Dr Devesh",
-    "tagline": "Enterprise program manager. Business, agility, life, research.",
-    "cpt": []
   },
   "shoppingkirana": {
     "domain": "shoppingkirana.com",
     "docroot": "/home/koloconi/shoppingkirana.com",
     "name": "Shopping Kirana",
+    "tier": "legacy",
     "tagline": "Neighborhood kirana, online.",
     "cpt": [
-      { "key": "kirana_item", "plural": "Items", "singular": "Item", "slug": "items", "icon": "dashicons-cart" }
+      {
+        "key": "kirana_item",
+        "plural": "Items",
+        "singular": "Item",
+        "slug": "items",
+        "icon": "dashicons-cart"
+      }
     ]
   },
   "rkitc": {
     "domain": "rkitc.org",
     "docroot": "/home/koloconi/rkitc.org",
     "name": "RKITC",
+    "tier": "legacy",
     "tagline": "Organization site.",
     "cpt": []
   },
@@ -135,6 +307,7 @@
     "domain": "kolocon.com",
     "docroot": "/home/koloconi/public_html/kolocon.com",
     "name": "Kolocon",
+    "tier": "legacy",
     "tagline": "Kolocon.",
     "cpt": []
   }

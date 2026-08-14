@@ -25,12 +25,13 @@ chmod +x bin/deploy.sh
 3. WP Admin → Appearance → activate the child theme (parent `dogalaxy-core` stays installed).
 4. Old theme stays as rollback.
 
-| Slug | Domain | Needs Softaculous WP first? |
-|---|---|---|
-| doswagat, donirman, dorishta, dorojgar, doudyog, dovishram, dovyapaar | already WP | no |
-| doaaram | blocked 503 — fix Imunify first | yes |
-| kusumit, kusumit-org, aspirant, agilehub, drdevesh | SitePad | yes |
-| shoppingkirana, rkitc, kolocon | down | yes |
+Core first: `mydoapp` `doudyog` `dovishram` `dorojgar` `doswagat` `dorishta` `dobajar` `drdevesh` `agilehub`.
+
+| Slug | Needs Softaculous WP first? |
+|---|---|
+| doudyog, dovishram, dorojgar, doswagat, dorishta | no (already WP) |
+| mydoapp, dobajar | **yes** — add domain in cPanel first |
+| drdevesh, agilehub | yes (SitePad today) |
 
 Do **not** run deploy on `kolocon.in` (same docroot as kusumit.com).
 
