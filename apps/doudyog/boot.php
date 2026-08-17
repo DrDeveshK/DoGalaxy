@@ -303,6 +303,13 @@ function h(?string $s): string
     return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8');
 }
 
+function site_icon_href(string $mark): string
+{
+    $letter = strtoupper(substr(preg_replace('/[^A-Za-z0-9]/', '', $mark) ?: 'D', 0, 1));
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" rx="22" fill="#073a76"/><text x="48" y="63" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="800" fill="#fff">' . $letter . '</text></svg>';
+    return 'data:image/svg+xml,' . rawurlencode($svg);
+}
+
 function user(): ?array
 {
     return $_SESSION['u'] ?? null;
@@ -462,7 +469,7 @@ function shell_start(string $title = 'DoUdyog'): void
 {
     $me = user();
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
-    echo '<title>' . h($title) . '</title><link rel="stylesheet" href="assets/app.css"></head><body>';
+    echo '<title>' . h($title) . '</title><link rel="icon" href="' . h(site_icon_href('D')) . '"><link rel="apple-touch-icon" href="' . h(site_icon_href('D')) . '"><link rel="stylesheet" href="assets/app.css"></head><body>';
     echo '<a class="skip-link" href="#main">Skip to content</a>';
     echo '<div class="topbar"><div class="container"><span>' . h(setting('topbar', 'DoUdyog')) . '</span><span>Kusumit Universe · MyDoApp</span></div></div>';
     echo '<header class="site-header"><div class="container header-inner">';
