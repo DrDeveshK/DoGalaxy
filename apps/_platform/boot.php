@@ -21,10 +21,13 @@ function is_local(): bool
     if (getenv('DG_LOCAL') === '1') {
         return true;
     }
-    if (is_file(DG_APP . '/config.local.php')) {
-        return false;
-    }
-    return is_file(DG_APP . '/local.sqlite');
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    return strpos($host, '127.0.0.1') === 0 || strpos($host, 'localhost') === 0;
+}
+
+function use_sqlite(): bool
+{
+    return getenv('DG_LOCAL') === '1' || !is_file(DG_APP . '/config.local.php');
 }
 
 function db(): PDO
@@ -34,7 +37,7 @@ function db(): PDO
         return $pdo;
     }
     $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_EMULATE_PREPARES => false];
-    if (is_local()) {
+    if (use_sqlite()) {
         $pdo = new PDO('sqlite:' . DG_APP . '/local.sqlite', null, null, $opts);
         $pdo->exec('PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;');
         migrate_sqlite($pdo);

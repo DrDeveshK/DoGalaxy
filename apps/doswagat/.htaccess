@@ -8,3 +8,6 @@ DirectoryIndex index.php
 <Files "boot.php">
   Require all denied
 </Files>
+<FilesMatch "^local\.sqlite">
+  Require all denied
+</FilesMatch>
