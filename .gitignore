@@ -11,3 +11,7 @@ vendor/
 .idea/
 .vscode/
 **/__pycache__/
+.tools/
+*.sqlite
+apps/**/local.sqlite
+apps/**/uploads/**

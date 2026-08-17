@@ -11,6 +11,9 @@ MySQL tables (`dg_*`) — not WordPress CPTs. One identity layer, six product mo
 | Swagat | `dg_venues` `dg_event_requests` |
 | Rishta | `dg_profiles` (21+) `dg_interests` |
 | Bajar | `dg_listings` `dg_order_requests` |
+| Aaram | `dg_services` `dg_service_requests` |
+| Nirman | `dg_contractors` `dg_project_leads` |
+| Vyapaar | `dg_suppliers` `dg_rfqs` |
 
 SQL: `schema/dogalaxy.sql`.
 
