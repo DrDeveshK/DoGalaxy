@@ -3,8 +3,11 @@
 .env.local
 cpanel.env
 *.env
+config.local.php
+apps/**/config.local.php
 *.log
 node_modules/
 vendor/
 .idea/
 .vscode/
+**/__pycache__/
