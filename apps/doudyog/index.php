@@ -423,7 +423,7 @@ if ($p === 'join') {
     }
     echo '</select></div><br><button class="btn" type="submit">Search directory</button></form><hr><p><b>Popular:</b> MSME registration, GST help, vendor discovery, storefront, hiring kit.</p></div></div></section>';
     echo '<section class="section"><div class="container"><div class="section-title"><div><h2>One business command centre</h2><p>Identity, compliance, operations, people, trade and growth.</p></div></div><div class="grid-3">';
-    foreach ([['🏢', 'Business identity', 'A verified digital profile for your shop, factory or firm.'], ['📋', 'Compliance centre', 'Track Udyam, GST, invoices, licences and readiness.'], ['📈', 'Growth programs', 'Guided tracks for digital presence, trade and sales.'], ['🤝', 'Partner network', 'Suppliers on DoVyapaar, staff on DoRojgar, buyers on DoBajar.'], ['🧰', 'Business services', 'Advisors, setup packages and documentation help.'], ['🌌', 'Do Galaxy ready', 'One identity across MyDoApp connected platforms.']] as $f) {
+    foreach ([['🏢', 'Business identity', 'A verified digital profile for your shop, factory or firm.'], ['📋', 'Compliance centre', 'Track Udyam, GST, invoices, licences and readiness.'], ['📈', 'Growth programs', 'Guided tracks for digital presence, trade and sales.'], ['🤝', 'Partner network', 'Suppliers, hiring, retail and service channels from one business desk.'], ['🧰', 'Business services', 'Advisors, setup packages and documentation help.'], ['🌌', 'Do Galaxy ready', 'One verified business identity across connected growth channels.']] as $f) {
         echo '<div class="feature"><div class="icon">' . $f[0] . '</div><h3>' . h($f[1]) . '</h3><p>' . h($f[2]) . '</p></div>';
     }
     echo '</div></div></section>';

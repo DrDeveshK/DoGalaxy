@@ -514,7 +514,7 @@ function shell_start(string $title = ''): void
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
     echo '<title>' . h($title ?: $brand) . '</title><link rel="icon" href="' . h(site_icon_href($P['mark'] ?? 'D')) . '"><link rel="apple-touch-icon" href="' . h(site_icon_href($P['mark'] ?? 'D')) . '"><link rel="stylesheet" href="assets/app.css"></head><body>';
     echo '<a class="skip-link" href="#main">Skip to content</a>';
-    echo '<div class="topbar"><div class="container"><span>' . h(setting('topbar', $P['topbar'])) . '</span><span>Kusumit Universe · MyDoApp</span></div></div>';
+    echo '<div class="topbar"><div class="container"><span>' . h(setting('topbar', $P['topbar'])) . '</span><span>Kusumit Universe · Do Galaxy</span></div></div>';
     echo '<header class="site-header"><div class="container header-inner">';
     echo '<a class="brand" href="?p=home"><span class="brand-mark">' . h($P['mark']) . '<span>o</span></span><span>' . h($brand) . '</span></a>';
     echo '<nav class="nav" id="mainNav"><a href="?p=home">Home</a>';

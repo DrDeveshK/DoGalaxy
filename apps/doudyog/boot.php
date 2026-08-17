@@ -480,7 +480,7 @@ function shell_start(string $title = 'DoUdyog'): void
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
     echo '<title>' . h($title) . '</title><link rel="icon" href="' . h(site_icon_href('D')) . '"><link rel="apple-touch-icon" href="' . h(site_icon_href('D')) . '"><link rel="stylesheet" href="assets/app.css"></head><body>';
     echo '<a class="skip-link" href="#main">Skip to content</a>';
-    echo '<div class="topbar"><div class="container"><span>' . h(setting('topbar', 'DoUdyog')) . '</span><span>Kusumit Universe · MyDoApp</span></div></div>';
+    echo '<div class="topbar"><div class="container"><span>' . h(setting('topbar', 'DoUdyog')) . '</span><span>Kusumit Universe · Do Galaxy</span></div></div>';
     echo '<header class="site-header"><div class="container header-inner">';
     echo '<a class="brand" href="?p=home"><span class="brand-mark">D<span>o</span></span><span>' . h(setting('brand', 'DoUdyog')) . '</span></a>';
     echo '<nav class="nav" id="mainNav">';
