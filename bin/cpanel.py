@@ -8,6 +8,7 @@ import os
 import ssl
 import sys
 import tempfile
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -289,13 +290,14 @@ def cmd_phpapp(env, args):
                 if f.is_file() and f.name not in skip:
                     z.write(f, f.relative_to(src))
         api2(env, "Fileman", "mkdir", path=products[slug]["docroot"], name="app")
-        upload(env, zpath, "/home/koloconi/tmp", f"{slug}-phpapp.zip")
+        remote_zip = f"{slug}-phpapp-{int(time.time())}.zip"
+        upload(env, zpath, "/home/koloconi/tmp", remote_zip)
     api2(
         env,
         "Fileman",
         "fileop",
         op="extract",
-        sourcefiles=f"/home/koloconi/tmp/{slug}-phpapp.zip",
+        sourcefiles=f"/home/koloconi/tmp/{remote_zip}",
         destfiles=dest,
     )
     print("php app →", dest)

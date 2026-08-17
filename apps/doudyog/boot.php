@@ -45,6 +45,12 @@ function db(): PDO
     ] as $t => $cols) {
         $pdo->exec("CREATE TABLE IF NOT EXISTS $t ($cols) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     }
+    ensure_mysql_col($pdo, 'dg_businesses', 'state', 'VARCHAR(120) NULL');
+    ensure_mysql_col($pdo, 'dg_businesses', 'phone', 'VARCHAR(40) NULL');
+    ensure_mysql_col($pdo, 'dg_businesses', 'logo', 'VARCHAR(255) NULL');
+    ensure_mysql_col($pdo, 'dg_businesses', 'verify_note', 'TEXT NULL');
+    ensure_mysql_col($pdo, 'dg_businesses', 'featured', 'TINYINT NOT NULL DEFAULT 0');
+    ensure_mysql_col($pdo, 'dg_users', 'email_ok', 'TINYINT NOT NULL DEFAULT 0');
     seed_platform($pdo);
     return $pdo;
 }
@@ -112,6 +118,15 @@ function ensure_col(PDO $pdo, string $table, string $col, string $def): void
         }
     }
     $pdo->exec("ALTER TABLE $table ADD COLUMN $col $def");
+}
+
+function ensure_mysql_col(PDO $pdo, string $table, string $col, string $def): void
+{
+    $st = $pdo->prepare("SHOW COLUMNS FROM $table LIKE ?");
+    $st->execute([$col]);
+    if (!$st->fetch()) {
+        $pdo->exec("ALTER TABLE $table ADD COLUMN $col $def");
+    }
 }
 
 function seed_platform(PDO $pdo): void
