@@ -6,7 +6,13 @@ if (PHP_SAPI !== 'cli') {
 
 function is_local(): bool
 {
-    return is_file(__DIR__ . '/local.sqlite') || getenv('DG_LOCAL') === '1';
+    if (getenv('DG_LOCAL') === '1') {
+        return true;
+    }
+    if (is_file(__DIR__ . '/config.local.php')) {
+        return false;
+    }
+    return is_file(__DIR__ . '/local.sqlite');
 }
 
 function db(): PDO

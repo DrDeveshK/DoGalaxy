@@ -18,7 +18,13 @@ function product(): array
 
 function is_local(): bool
 {
-    return is_file(DG_APP . '/local.sqlite') || getenv('DG_LOCAL') === '1';
+    if (getenv('DG_LOCAL') === '1') {
+        return true;
+    }
+    if (is_file(DG_APP . '/config.local.php')) {
+        return false;
+    }
+    return is_file(DG_APP . '/local.sqlite');
 }
 
 function db(): PDO
