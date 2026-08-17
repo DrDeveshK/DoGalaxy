@@ -284,8 +284,9 @@ def cmd_phpapp(env, args):
     with tempfile.TemporaryDirectory() as td:
         zpath = Path(td) / f"{slug}-phpapp.zip"
         with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
+            skip = {"config.local.php", "local.sqlite", "local.sqlite-shm", "local.sqlite-wal"}
             for f in src.rglob("*"):
-                if f.is_file() and f.name != "config.local.php":
+                if f.is_file() and f.name not in skip:
                     z.write(f, f.relative_to(src))
         api2(env, "Fileman", "mkdir", path=products[slug]["docroot"], name="app")
         upload(env, zpath, "/home/koloconi/tmp", f"{slug}-phpapp.zip")
