@@ -47,9 +47,77 @@ function db(): PDO
     }
     $c = require $f;
     $pdo = new PDO($c['dsn'], $c['user'], $c['pass'], $opts);
-    $pdo->exec('CREATE TABLE IF NOT EXISTS dg_settings (k VARCHAR(80) NOT NULL PRIMARY KEY, v TEXT NOT NULL)');
+    migrate_mysql($pdo);
     seed_platform($pdo);
     return $pdo;
+}
+
+function migrate_mysql(PDO $pdo): void
+{
+    foreach ([
+        'dg_users' => 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, email VARCHAR(190) NOT NULL UNIQUE, password_hash VARCHAR(255) NOT NULL, name VARCHAR(190) NOT NULL, phone VARCHAR(40) NULL, role VARCHAR(40) NOT NULL DEFAULT \'member\', status VARCHAR(40) NOT NULL DEFAULT \'active\', email_ok TINYINT NOT NULL DEFAULT 0, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, last_login_at DATETIME NULL',
+        'dg_audit' => 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id BIGINT UNSIGNED NULL, entity VARCHAR(80) NOT NULL, entity_id BIGINT UNSIGNED NULL, action VARCHAR(80) NOT NULL, meta TEXT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'dg_enquiries' => 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, product VARCHAR(80) NOT NULL, target_id BIGINT UNSIGNED NULL, user_id BIGINT UNSIGNED NULL, name VARCHAR(190) NOT NULL, email VARCHAR(190) NOT NULL, phone VARCHAR(40) NULL, intent VARCHAR(80) NOT NULL DEFAULT \'general\', message TEXT NOT NULL, status VARCHAR(40) NOT NULL DEFAULT \'new\', created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'dg_settings' => 'k VARCHAR(80) NOT NULL PRIMARY KEY, v TEXT NOT NULL',
+        'dg_mail' => 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, to_email VARCHAR(190) NOT NULL, subject VARCHAR(190) NOT NULL, body TEXT NOT NULL, token VARCHAR(64) NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'dg_notices' => 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id BIGINT UNSIGNED NOT NULL, title VARCHAR(190) NOT NULL, body TEXT NOT NULL, link VARCHAR(190) NULL, seen TINYINT NOT NULL DEFAULT 0, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'dg_files' => 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, listing_id BIGINT UNSIGNED NOT NULL, code VARCHAR(80) NOT NULL, path VARCHAR(255) NOT NULL, orig VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'dg_replies' => 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, enquiry_id BIGINT UNSIGNED NOT NULL, user_id BIGINT UNSIGNED NULL, author VARCHAR(190) NOT NULL, body TEXT NOT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'dg_orders' => 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id BIGINT UNSIGNED NULL, listing_id BIGINT UNSIGNED NULL, kind VARCHAR(40) NOT NULL, item VARCHAR(190) NOT NULL, amount VARCHAR(80) NULL, status VARCHAR(40) NOT NULL DEFAULT \'new\', note TEXT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'dg_tokens' => 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id BIGINT UNSIGNED NOT NULL, purpose VARCHAR(40) NOT NULL, token VARCHAR(80) NOT NULL UNIQUE, expires_at DATETIME NOT NULL',
+        'dg_journeys' => 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id BIGINT UNSIGNED NOT NULL, path VARCHAR(80) NOT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
+    ] as $table => $cols) {
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `' . mysql_ident($table) . '` (' . $cols . ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+    }
+    $P = product();
+    if (($P['mode'] ?? '') !== 'hub' && !empty($P['listing_table'])) {
+        $cols = '`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, `' . mysql_ident($P['owner_col']) . '` BIGINT UNSIGNED NOT NULL';
+        foreach ($P['fields'] as $f) {
+            $cols .= ', `' . mysql_ident($f[0]) . '` TEXT NULL';
+        }
+        $cols .= ', `' . mysql_ident($P['status_col']) . '` VARCHAR(40) NOT NULL DEFAULT \'pending\', `featured` TINYINT NOT NULL DEFAULT 0, `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP';
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `' . mysql_ident($P['listing_table']) . '` (' . $cols . ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+        $rcols = '`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, `' . mysql_ident($P['request_fk']) . '` BIGINT UNSIGNED NOT NULL, `name` VARCHAR(190) NOT NULL, `email` VARCHAR(190) NOT NULL, `phone` VARCHAR(40) NULL, `status` VARCHAR(40) NOT NULL DEFAULT \'new\', `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP';
+        foreach ($P['request_fields'] as $f) {
+            $rcols .= ', `' . mysql_ident($f[0]) . '` TEXT NULL';
+        }
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `' . mysql_ident($P['request_table']) . '` (' . $rcols . ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+        ensure_mysql_columns($pdo, $P['listing_table'], array_merge([$P['owner_col'], $P['status_col'], 'featured'], array_column($P['fields'], 0)));
+        ensure_mysql_columns($pdo, $P['request_table'], array_merge([$P['request_fk']], array_column($P['request_fields'], 0)));
+    }
+    if (($P['slug'] ?? '') === 'dorojgar') {
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `dg_candidates` (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id BIGINT UNSIGNED NOT NULL UNIQUE, full_name TEXT NULL, phone TEXT NULL, email TEXT NULL, city TEXT NULL, preferred_role TEXT NULL, education TEXT NULL, experience TEXT NULL, skills TEXT NULL, availability TEXT NULL, resume_url TEXT NULL, about TEXT NULL, updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+    }
+    if (($P['slug'] ?? '') === 'dovyapaar') {
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `dg_requirements` (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id BIGINT UNSIGNED NULL, name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT NULL, item TEXT NOT NULL, qty TEXT NULL, city TEXT NULL, message TEXT NULL, status VARCHAR(40) NOT NULL DEFAULT \'open\', entry_type TEXT NULL, lead_type TEXT NULL, industry TEXT NULL, budget TEXT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `dg_quotes` (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, requirement_id BIGINT UNSIGNED NOT NULL, supplier_id BIGINT UNSIGNED NOT NULL, amount TEXT NULL, note TEXT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `dg_trade_products` (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, title TEXT NOT NULL, industry TEXT NULL, city TEXT NULL, price TEXT NULL, moq TEXT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `dg_trade_leads` (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, title TEXT NOT NULL, lead_type TEXT NULL, industry TEXT NULL, city TEXT NULL, qty TEXT NULL, body TEXT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+    }
+    if (($P['slug'] ?? '') === 'donirman') {
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `dg_estimates` (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id BIGINT UNSIGNED NULL, city TEXT NULL, area TEXT NULL, floors TEXT NULL, grade TEXT NULL, basement TEXT NULL, total TEXT NULL, payload LONGTEXT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `dg_projects` (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id BIGINT UNSIGNED NOT NULL, title TEXT NOT NULL, city TEXT NULL, stage VARCHAR(80) NOT NULL DEFAULT \'brief\', note TEXT NULL, estimate_id BIGINT UNSIGNED NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+        $pdo->exec('CREATE TABLE IF NOT EXISTS `dg_articles` (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, slug VARCHAR(190) NOT NULL UNIQUE, category TEXT NOT NULL, title TEXT NOT NULL, body TEXT NOT NULL, icon TEXT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+    }
+}
+
+function mysql_ident(string $s): string
+{
+    return preg_replace('/[^a-zA-Z0-9_]/', '', $s);
+}
+
+function ensure_mysql_columns(PDO $pdo, string $table, array $cols): void
+{
+    foreach ($cols as $col) {
+        $col = mysql_ident((string) $col);
+        if ($col === '') {
+            continue;
+        }
+        $st = $pdo->query('SHOW COLUMNS FROM `' . mysql_ident($table) . '` LIKE ' . $pdo->quote($col));
+        if (!$st->fetch()) {
+            $pdo->exec('ALTER TABLE `' . mysql_ident($table) . '` ADD COLUMN `' . $col . '` TEXT NULL');
+        }
+    }
 }
 
 function migrate_sqlite(PDO $pdo): void
