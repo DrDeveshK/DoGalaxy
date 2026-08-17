@@ -122,10 +122,10 @@ function ensure_col(PDO $pdo, string $table, string $col, string $def): void
 
 function ensure_mysql_col(PDO $pdo, string $table, string $col, string $def): void
 {
-    $st = $pdo->prepare("SHOW COLUMNS FROM $table LIKE ?");
-    $st->execute([$col]);
+    $safeTable = preg_replace('/[^a-zA-Z0-9_]/', '', $table);
+    $st = $pdo->query("SHOW COLUMNS FROM `$safeTable` LIKE " . $pdo->quote($col));
     if (!$st->fetch()) {
-        $pdo->exec("ALTER TABLE $table ADD COLUMN $col $def");
+        $pdo->exec("ALTER TABLE `$safeTable` ADD COLUMN `$col` $def");
     }
 }
 
