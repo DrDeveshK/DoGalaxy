@@ -43,6 +43,9 @@ function handle_product_post(PDO $db, string &$err): void
         $err = 'Session expired. Try again.';
         return;
     }
+    if (function_exists('product_handle_post') && product_handle_post($db, $act, $err)) {
+        return;
+    }
     if ($act === 'save' && user() && ($P['mode'] ?? '') !== 'hub') {
         $id = (int) ($_POST['id'] ?? 0);
         $cols = [];
@@ -164,7 +167,7 @@ function handle_product_post(PDO $db, string &$err): void
         $paths = $P['paths'];
         if (isset($paths[$path])) {
             $db->prepare('INSERT INTO dg_journeys (user_id, path) VALUES (?,?)')->execute([user()['id'], $path]);
-            header('Location: ' . $paths[$path][1]);
+            header('Location: ' . galaxy_url($path));
             exit;
         }
     }
@@ -190,6 +193,15 @@ function run_app(): void
     $db = db();
     $err = '';
     $page = (string) ($_GET['p'] ?? 'home');
+    if ($page === 'guide') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            guide_json_response($db, $P['slug']);
+        }
+        shell_start('Ask Do — ' . $P['brand']);
+        guide_render_page($db, $P['slug']);
+        shell_end();
+        return;
+    }
     if ($page === 'file') {
         $id = (int) ($_GET['id'] ?? 0);
         $st = $db->prepare('SELECT * FROM dg_files WHERE id=?');
@@ -227,7 +239,7 @@ function run_app(): void
         handle_product_post($db, $err);
     }
     $me = user();
-    $need = ['dash', 'docs', 'inbox', 'orders', 'notices', 'account'];
+    $need = array_merge(['dash', 'docs', 'inbox', 'orders', 'notices', 'account'], array_keys($P['dash_extra'] ?? []));
     if (in_array($page, $need, true) && !$me) {
         go('login');
     }
@@ -263,6 +275,9 @@ function run_app(): void
 
 function render_page(PDO $db, string $page, array $P, ?array $me): void
 {
+    if (function_exists('product_render_page') && product_render_page($db, $page, $P, $me)) {
+        return;
+    }
     $hub = ($P['mode'] ?? '') === 'hub';
     if ($page === 'join') {
         echo '<section class="section soft"><div class="container"><div class="card"><h2>' . h($P['join_cta']) . '</h2>';
@@ -432,6 +447,11 @@ function render_page(PDO $db, string $page, array $P, ?array $me): void
             $args[] = "%$q%";
             $args[] = "%$q%";
         }
+        $trade = trim((string) ($_GET['trade'] ?? ''));
+        if ($trade !== '' && in_array('trade', array_column($P['fields'], 0), true)) {
+            $sql .= ' AND trade LIKE ?';
+            $args[] = "%$trade%";
+        }
         $st = $db->prepare($sql . ' ORDER BY featured DESC, id DESC LIMIT 50');
         $st->execute($args);
         $rows = $st->fetchAll();
@@ -507,9 +527,9 @@ function render_page(PDO $db, string $page, array $P, ?array $me): void
         return;
     }
     if ($page === 'products' && $hub) {
-        echo '<section class="section"><div class="container"><div class="grid-3">';
-        foreach ($P['paths'] as $r) {
-            echo '<div class="feature"><h3>' . h($r[0]) . '</h3><p><a class="btn" href="' . h($r[1]) . '">Open</a></p></div>';
+        echo '<section class="section"><div class="container"><div class="section-title"><div><h2>Do Galaxy products</h2><p>Choose the planet that matches your current need.</p></div><a class="btn light" href="?p=guide">Ask Do</a></div><div class="grid-3">';
+        foreach ($P['paths'] as $k => $r) {
+            echo '<div class="feature"><h3>' . h($r[0]) . '</h3><p>' . h($r[2]) . '</p><p><a class="btn" href="' . h(galaxy_url($k)) . '">Open</a></p></div>';
         }
         echo '</div></div></section>';
         return;
@@ -522,6 +542,9 @@ function render_page(PDO $db, string $page, array $P, ?array $me): void
     echo '<h1>' . h(setting('hero_h1')) . '</h1><p>' . h(setting('hero_p')) . '</p>';
     echo '<div class="hero-actions"><a class="btn" href="?p=join">' . h($P['join_cta']) . '</a>';
     echo $hub ? '<a class="btn light" href="?p=products">See products</a>' : '<a class="btn light" href="?p=dir">Explore</a>';
+    foreach ($P['hero_extra'] ?? [] as $n) {
+        echo '<a class="btn light" href="?p=' . h($n[0]) . '">' . h($n[1]) . '</a>';
+    }
     echo '</div></div><div class="search-panel"><h3>Search</h3>';
     if ($hub) {
         echo '<p>One account for every Do Galaxy planet.</p><a class="btn" href="?p=join">Create account</a>';

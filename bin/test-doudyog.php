@@ -38,8 +38,23 @@ function ok(string $name, bool $pass, string $detail = ''): void
     }
 }
 
+function guide_has(string $base, string $q, string $needle): bool
+{
+    [$c, $h] = req("$base/?p=guide", [
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => json_encode(['q' => $q]),
+    ]);
+    return $c === 200 && str_contains($h, $needle);
+}
+
 [$c, $h] = req("$base/?p=home");
 ok('home', $c === 200 && str_contains($h, 'Register business'));
+[$c, $h] = req("$base/?p=guide");
+ok('ask do page', $c === 200 && str_contains($h, 'Ask Do'));
+ok('ask do aaram', guide_has($base, 'home care', 'DoAaram'));
+ok('ask do nirman', guide_has($base, 'cost estimate', 'DoNirman'));
+ok('ask do rishta', guide_has($base, '21 safety', 'DoRishta'));
 
 [$c, $h] = req("$base/?p=dir");
 ok('directory seeded', $c === 200 && str_contains($h, 'Sharma Engineering Works') && str_contains($h, 'Aarambh Retail'));
@@ -57,7 +72,7 @@ $t = csrf($h);
 ]);
 ok('enquiry stored', $c === 200 && (str_contains($h, 'Stored') || str_contains($h, 'Enquiry received') || str_contains($raw, 'sent=1')));
 
-foreach (['services', 'growth', 'pricing', 'contact', 'join', 'login'] as $p) {
+foreach (['services', 'growth', 'readiness', 'pricing', 'contact', 'join', 'login'] as $p) {
     [$c, $h] = req("$base/?p=$p");
     ok("page $p", $c === 200 && strlen($h) > 400);
 }
@@ -148,6 +163,15 @@ $mark = 'Udyog test ' . time();
 ok('admin save copy', $c === 200 && str_contains($h, 'Site copy saved'));
 [$c, $h] = req("$base/?p=home");
 ok('home uses admin copy', $c === 200 && str_contains($h, $mark));
+[$c, $h] = req("$base/?p=admin&tab=site");
+$t = csrf($h);
+[$c, $h] = req("$base/?p=admin&tab=site", [
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => http_build_query(['csrf' => $t, 'act' => 'reset_site']),
+]);
+ok('reset public copy', $c === 200 && str_contains($h, 'Public copy reset'));
+[$c, $h] = req("$base/?p=home");
+ok('home copy restored', $c === 200 && !str_contains($h, $mark));
 [$c, $h] = req("$base/?p=admin&tab=biz");
 $t = csrf($h);
 [$c, $h] = req("$base/?p=admin&tab=biz", [
@@ -237,22 +261,5 @@ $oid = (int) $pdo->query('SELECT id FROM dg_orders ORDER BY id DESC LIMIT 1')->f
     CURLOPT_POSTFIELDS => http_build_query(['csrf' => $t, 'act' => 'order_status', 'id' => $oid, 'status' => 'accepted']),
 ]);
 ok('admin accept request', $c === 200 && str_contains($h, 'marked accepted'));
-[$c, $h] = req("$base/?p=admin&tab=site");
-$t = csrf($h);
-req("$base/?p=admin&tab=site", [
-    CURLOPT_POST => true,
-    CURLOPT_POSTFIELDS => http_build_query([
-        'csrf' => $t, 'act' => 'site',
-        'brand' => 'DoUdyog',
-        'topbar' => 'DoUdyog — Business identity, compliance, growth and MSME enablement',
-        'eyebrow' => 'उद्योग बढ़े, भारत बढ़े',
-        'hero_h1' => 'Build, verify and grow your business with DoUdyog.',
-        'hero_p' => 'DoUdyog is the MSME operating centre of Do Galaxy. Create a business profile, manage compliance, get found, then hire, trade and sell across the other planets.',
-        'services_intro' => 'Packaged help. Request any item — it lands as an enquiry.',
-        'growth_intro' => 'Guided tracks. Join from contact — we match an advisor.',
-        'footer_blurb' => "India's business operating-system planet under Do Galaxy — identity, compliance, services and growth for MSMEs.",
-    ]),
-]);
-
 echo $fail === 0 ? "\nALL PASS\n" : "\n$fail FAILED\n";
 exit($fail === 0 ? 0 : 1);

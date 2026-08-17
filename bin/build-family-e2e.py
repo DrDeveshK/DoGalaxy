@@ -469,7 +469,7 @@ def write_product(slug: str, spec: dict) -> None:
     (app / "index.php").write_text(INDEX, encoding="utf-8")
     (app / ".htaccess").write_text(HTACCESS, encoding="utf-8")
     (app / "uploads" / ".htaccess").write_text("Require all denied\n", encoding="utf-8")
-    shutil.copyfile(CSS, app / "assets" / "app.css")
+    # Colour is applied by bin/apply-themes.py — do not copy the Udyog navy sheet.
     install = ROOT / "apps" / "doudyog" / "install.php"
     shutil.copyfile(install, app / "install.php")
     (app / "seed.php").write_text(

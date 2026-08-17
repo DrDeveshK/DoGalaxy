@@ -8,6 +8,7 @@ if ($slug === 'doudyog') {
     require $app . '/boot.php';
     $db = db();
     $n = (int) $db->query('SELECT COUNT(*) FROM dg_businesses')->fetchColumn();
+    reset_public_copy();
     if ($n > 0) {
         echo "seed exists ($n businesses)\n";
         exit(0);
@@ -39,11 +40,16 @@ require $root . '/apps/_platform/boot.php';
 $db = db();
 $P = product();
 if (($P['mode'] ?? '') === 'hub') {
+    reset_public_copy();
     echo "hub ready (admin@{$slug}.local / AdminPass9)\n";
     exit(0);
 }
 $n = (int) $db->query('SELECT COUNT(*) FROM ' . $P['listing_table'])->fetchColumn();
+reset_public_copy();
 if ($n > 0) {
+    if (function_exists('product_seed')) {
+        product_seed($db);
+    }
     echo "seed exists ($n {$P['listing_label']}s)\n";
     exit(0);
 }
@@ -71,5 +77,8 @@ foreach ($rows as $row) {
     $vals[] = $status;
     $db->prepare('INSERT INTO ' . $P['listing_table'] . ' (' . implode(',', $cols) . ') VALUES (' . implode(',', array_fill(0, count($cols), '?')) . ')')->execute($vals);
     $i++;
+}
+if (function_exists('product_seed')) {
+    product_seed($db);
 }
 echo 'seeded ' . count($rows) . " {$P['listing_label']}s (password SeedPass9)\n";

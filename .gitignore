@@ -12,6 +12,7 @@ vendor/
 .vscode/
 **/__pycache__/
 .tools/
+host-review/
 *.sqlite
 apps/**/local.sqlite
 apps/**/uploads/**

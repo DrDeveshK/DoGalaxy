@@ -156,6 +156,15 @@ function default_settings(): array
     ];
 }
 
+function reset_public_copy(): void
+{
+    foreach (default_settings() as $k => $v) {
+        if (in_array($k, ['brand', 'topbar', 'eyebrow', 'hero_h1', 'hero_p', 'services_intro', 'growth_intro', 'footer_blurb'], true)) {
+            setting_set($k, $v);
+        }
+    }
+}
+
 function setting(string $k, string $fallback = ''): string
 {
     static $all;
@@ -439,11 +448,12 @@ function shell_start(string $title = 'DoUdyog'): void
     $me = user();
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
     echo '<title>' . h($title) . '</title><link rel="stylesheet" href="assets/app.css"></head><body>';
+    echo '<a class="skip-link" href="#main">Skip to content</a>';
     echo '<div class="topbar"><div class="container"><span>' . h(setting('topbar', 'DoUdyog')) . '</span><span>Kusumit Universe · MyDoApp</span></div></div>';
     echo '<header class="site-header"><div class="container header-inner">';
     echo '<a class="brand" href="?p=home"><span class="brand-mark">D<span>o</span></span><span>' . h(setting('brand', 'DoUdyog')) . '</span></a>';
     echo '<nav class="nav" id="mainNav">';
-    echo '<a href="?p=home">Home</a><a href="?p=dir">Businesses</a><a href="?p=services">Services</a><a href="?p=growth">Growth</a><a href="?p=pricing">Pricing</a><a href="?p=contact">Contact</a>';
+    echo '<a href="?p=home">Home</a><a href="?p=dir">Businesses</a><a href="?p=services">Services</a><a href="?p=growth">Growth</a><a href="?p=readiness">Galaxy readiness</a><a href="?p=pricing">Pricing</a><a href="?p=guide">Ask Do</a><a href="?p=contact">Contact</a>';
     if ($me) {
         if (is_admin()) {
             echo '<a href="?p=admin">Admin</a>';
@@ -456,15 +466,21 @@ function shell_start(string $title = 'DoUdyog'): void
         echo '<a href="?p=login">Log in</a>';
     }
     echo '</nav><button class="btn light mobile-toggle" type="button" onclick="document.getElementById(\'mainNav\').classList.toggle(\'open\')">Menu</button>';
-    echo '<a class="btn" href="?p=join">Join Udyog</a></div></header>';
+    echo '<a class="btn" href="?p=join">Join Udyog</a></div></header><main id="main">';
 }
 
 function shell_end(): void
 {
-    echo '<footer class="footer"><div class="container footer-grid">';
+    echo '</main><footer class="footer"><div class="container footer-grid">';
     echo '<div><h3>' . h(setting('brand', 'DoUdyog')) . '</h3><p>' . h(setting('footer_blurb', 'MSME operating centre.')) . '</p></div>';
-    echo '<div><h4>Platform</h4><a href="?p=dir">Businesses</a><a href="?p=services">Services</a><a href="?p=growth">Growth</a><a href="?p=pricing">Pricing</a></div>';
-    echo '<div><h4>Do Galaxy</h4><a href="https://mydoapp.com">MyDoApp</a><a href="https://dorojgar.com">DoRojgar</a><a href="https://dobajar.com">DoBajar</a><a href="https://dovyapaar.com">DoVyapaar</a></div>';
+    echo '<div><h4>Platform</h4><a href="?p=dir">Businesses</a><a href="?p=services">Services</a><a href="?p=growth">Growth</a><a href="?p=readiness">Galaxy readiness</a><a href="?p=pricing">Pricing</a><a href="?p=guide">Ask Do</a></div>';
+    echo '<div><h4>Do Galaxy</h4>';
+    guide_render_footer_links();
+    echo '</div>';
     echo '<div><h4>Company</h4><a href="?p=about">About</a><a href="?p=privacy">Privacy</a><a href="?p=terms">Terms</a><a href="?p=contact">Contact</a></div></div>';
-    echo '<div class="container" style="border-top:1px solid rgba(255,255,255,.12);margin-top:28px;padding-top:18px;color:#91a8c8">© ' . date('Y') . ' DoUdyog. A Kusumit Universe initiative.</div></footer></body></html>';
+    echo '<div class="container" style="border-top:1px solid rgba(255,255,255,.12);margin-top:28px;padding-top:18px;color:#91a8c8">© ' . date('Y') . ' DoUdyog. A Kusumit Universe initiative.</div></footer>';
+    guide_widget('doudyog');
+    echo '</body></html>';
 }
+
+require_once dirname(__DIR__) . '/_platform/guide.php';

@@ -15,6 +15,12 @@ function admin_boot(PDO $db): void
         flash('Site copy saved. Open Home to see it.');
         go('admin&tab=site');
     }
+    if ($act === 'reset_site') {
+        reset_public_copy();
+        audit($db, user()['id'], 'settings', null, 'reset_site');
+        flash('Public copy reset.');
+        go('admin&tab=site');
+    }
     if ($act === 'catalog') {
         setting_set('packages', trim((string) ($_POST['packages'] ?? '')));
         setting_set('programs', trim((string) ($_POST['programs'] ?? '')));
@@ -116,7 +122,7 @@ function admin_render(PDO $db): void
                 echo '<input class="input" name="' . $k . '" value="' . h(setting($k)) . '"><br><br>';
             }
         }
-        echo '<button class="btn" type="submit">Save copy</button> <a class="btn light" href="?p=home" target="_blank">Preview home</a></form>';
+        echo '<button class="btn" type="submit">Save copy</button> <a class="btn light" href="?p=home" target="_blank">Preview home</a></form><br><form method="post">' . csrf_fields('reset_site') . '<button class="btn light" type="submit">Reset public copy</button></form>';
     } elseif ($tab === 'catalog') {
         echo '<h3>Services, programs, prices</h3><p class="muted">One item per line: <code>Name | price or duration | short description</code></p>';
         echo '<form method="post"><input type="hidden" name="csrf" value="' . h(csrf_token()) . '"><input type="hidden" name="act" value="catalog">';

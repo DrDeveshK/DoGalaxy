@@ -1,0 +1,57 @@
+<?php
+return [
+    'brand' => 'DoBajar',
+    'mark' => 'B',
+    'topbar' => 'DoBajar — Hyperlocal retail, kirana and neighbourhood commerce',
+    'eyebrow' => 'बाज़ार डिजिटल, भरोसा स्थानीय',
+    'hero_h1' => 'Order from nearby shops and local sellers.',
+    'hero_p' => 'DoBajar is the hyperlocal retail planet of Do Galaxy: kirana, daily essentials, food, pharmacy-style listings, fresh produce and neighbourhood stores. Buyers request an order; sellers confirm pickup or local delivery.',
+    'footer_blurb' => 'Neighbourhood commerce for local shops, daily essentials and retail order requests.',
+    'page_about' => 'DoBajar is a hyperlocal retail and commerce desk. It is request-based, not instant checkout yet — shops accept or decline each order request and confirm pickup or local delivery.',
+    'join_cta' => 'Start selling',
+    'dir_label' => 'Neighbourhood shops',
+    'owner_role' => 'seller',
+    'listing_label' => 'Product',
+    'listing_table' => 'dg_listings',
+    'owner_col' => 'seller_id',
+    'title_col' => 'title',
+    'status_col' => 'status',
+    'listing_mode' => 'many',
+    'request_table' => 'dg_order_requests',
+    'request_fk' => 'listing_id',
+    'request_label' => 'Order request',
+    'fields' => [
+        ['title', 'Product name', 'text', true],
+        ['category', 'Category', 'select', true, ['Kirana', 'Daily essentials', 'Fresh produce', 'Food', 'Pharmacy', 'Fashion', 'Hardware', 'Other']],
+        ['city', 'City', 'text', true],
+        ['area', 'Area / locality', 'text', false],
+        ['store_hours', 'Store hours', 'text', false],
+        ['price', 'Price', 'text', false],
+        ['about', 'Description', 'textarea', false],
+    ],
+    'request_fields' => [
+        ['qty', 'Quantity', 'number', true],
+        ['address', 'Delivery / pickup area', 'text', false],
+        ['delivery_slot', 'Preferred time', 'text', false],
+        ['message', 'Message', 'textarea', true],
+    ],
+    'docs' => [
+        'gst' => 'GSTIN',
+        'photo' => 'Product photo sheet',
+        'address' => 'Pickup address',
+    ],
+    'packages' => 'Neighbourhood shopfront | ₹999 | Local retail listing pack.
+DoUdyog + Bajar | ₹1,999 | Business identity plus hyperlocal shop.
+Featured locality week | ₹499 | Homepage and area feature.',
+    'nav_extra' => [
+        ['shop', 'Nearby shops'],
+        ['track', 'Track order'],
+    ],
+    'hero_extra' => [
+        ['shop', 'Find nearby shops'],
+    ],
+    'slug' => 'dobajar',
+    'page_privacy' => 'We store the account, listing, documents and requests you submit. Staff see them to verify and support you. We do not sell your data. Write to the contact email to request deletion.',
+    'page_terms' => 'This is a listing and operating tool, not a government portal and not legal advice. You are responsible for the accuracy of what you enter. Verification is a human review. Paid packages are fulfilled after staff accept the request.',
+    'contact_email' => 'hello@dobajar.com',
+];

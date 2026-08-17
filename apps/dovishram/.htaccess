@@ -1,0 +1,10 @@
+DirectoryIndex index.php
+<Files "config.local.php">
+  Require all denied
+</Files>
+<Files "product.php">
+  Require all denied
+</Files>
+<Files "boot.php">
+  Require all denied
+</Files>

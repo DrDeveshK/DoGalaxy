@@ -1,0 +1,62 @@
+<?php
+return [
+    'brand' => 'DoAaram',
+    'mark' => 'A',
+    'topbar' => 'DoAaram — Multi-service home help, repairs, cleaning and care',
+    'eyebrow' => 'घर की सेवा, भरोसे से',
+    'hero_h1' => 'Book trusted home services and handyman help.',
+    'hero_p' => 'DoAaram is the UrbanCompany-style services planet of Do Galaxy. Families can request plumbing, electrical, carpentry, appliance repair, cleaning, pest control, beauty, wellness and home-care visits with a clear slot and locality.',
+    'footer_blurb' => 'Verified home services, handyman work, cleaning, wellness and care bookings.',
+    'page_about' => 'DoAaram is a multi-service home help desk for repairs, cleaning, beauty/wellness and home care. It is not a medical emergency line.',
+    'join_cta' => 'List as a pro',
+    'dir_label' => 'Services',
+    'owner_role' => 'provider',
+    'listing_label' => 'Service',
+    'listing_table' => 'dg_services',
+    'owner_col' => 'provider_id',
+    'title_col' => 'title',
+    'status_col' => 'status',
+    'listing_mode' => 'many',
+    'request_table' => 'dg_service_requests',
+    'request_fk' => 'service_id',
+    'request_label' => 'Booking',
+    'fields' => [
+        ['title', 'Service name', 'text', true],
+        ['category', 'Category', 'select', true, ['Plumbing', 'Electrical', 'Carpentry', 'Appliance repair', 'Cleaning', 'Pest control', 'Beauty & wellness', 'Home care', 'Other']],
+        ['city', 'City', 'text', true],
+        ['area', 'Area / locality', 'text', false],
+        ['rate', 'Rate', 'text', false],
+        ['experience', 'Experience / verification', 'text', false],
+        ['about', 'About', 'textarea', false],
+    ],
+    'request_fields' => [
+        ['when_date', 'Preferred date', 'date', false],
+        ['slot', 'Preferred slot', 'text', false],
+        ['area', 'Service locality', 'text', false],
+        ['address', 'Address / landmark', 'text', false],
+        ['message', 'What you need', 'textarea', true],
+    ],
+    'docs' => [
+        'id' => 'Provider ID',
+        'skill' => 'Skill certificate / work photos',
+        'police' => 'Police verification if any',
+        'address' => 'Address proof',
+    ],
+    'packages' => 'Verified pro listing | ₹999 | Provider profile, ID and skill review.
+Handyman visit pack | ₹1,999 | Plumbing, electrical or carpentry visit request.
+Home deep clean | ₹2,999 | Kitchen, bathroom or full-home cleaning request.
+Family care desk | ₹2,999 | Elder-care or nurse matching.',
+    'nav_extra' => [
+        ['categories', 'Service categories'],
+        ['packs', 'Service packs'],
+        ['care', 'Family care desk'],
+        ['track', 'Track booking'],
+    ],
+    'hero_extra' => [
+        ['categories', 'Book a service'],
+    ],
+    'slug' => 'doaaram',
+    'page_privacy' => 'We store the account, listing, documents and requests you submit. Staff see them to verify and support you. We do not sell your data. Write to the contact email to request deletion.',
+    'page_terms' => 'This is a listing and operating tool, not a government portal and not legal advice. You are responsible for the accuracy of what you enter. Verification is a human review. Paid packages are fulfilled after staff accept the request.',
+    'contact_email' => 'hello@doaaram.com',
+];

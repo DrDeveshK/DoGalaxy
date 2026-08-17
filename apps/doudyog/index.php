@@ -20,6 +20,15 @@ require __DIR__ . '/loop.php';
 $db = db();
 $err = '';
 $p = (string) ($_GET['p'] ?? 'home');
+if ($p === 'guide') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        guide_json_response($db, 'doudyog');
+    }
+    shell_start('Ask Do — DoUdyog');
+    guide_render_page($db, 'doudyog');
+    shell_end();
+    exit;
+}
 if ($p === 'file') {
     serve_file($db);
 }
@@ -264,6 +273,12 @@ if ($p === 'join') {
     echo '<div class="price-card"><h3>Starter</h3><div class="price">' . h(setting('price_starter', 'Free')) . '</div><ul class="checklist"><li>Business record</li><li>Compliance ledger</li><li>Directory listing</li></ul><a class="btn" href="?p=join">Join</a></div>';
     echo '<div class="price-card featured"><h3>Verified</h3><div class="price">' . h(setting('price_verified', '₹999')) . '</div><ul class="checklist"><li>Everything in Starter</li><li>Manual verification</li><li>Priority directory</li></ul><form method="post">' . csrf_fields('order') . '<input type="hidden" name="kind" value="verify"><input type="hidden" name="item" value="Verified listing"><button class="btn" type="submit">Request verify</button></form></div>';
     echo '<div class="price-card"><h3>Growth</h3><div class="price">' . h(setting('price_growth', '₹4,999')) . '</div><ul class="checklist"><li>Everything in Verified</li><li>Advisor program</li><li>Do Galaxy onboarding</li></ul><form method="post">' . csrf_fields('order') . '<input type="hidden" name="kind" value="program"><input type="hidden" name="item" value="Growth programme"><input type="hidden" name="amount" value="' . h(setting('price_growth', '₹4,999')) . '"><button class="btn" type="submit">Talk to us</button></form></div>';
+    echo '</div></div></section>';
+} elseif ($p === 'readiness') {
+    echo '<section class="section"><div class="container"><div class="section-title"><div><h2>Do Galaxy readiness</h2><p>MSME checklist before moving into retail, trade, hiring and services.</p></div><a class="btn light" href="?p=services">Get help</a></div><div class="grid-3">';
+    foreach ([['Identity', 'Business profile, GST/Udyam, address and public contact are ready.'], ['Retail', 'DoBajar shopfront can list local products, hours and delivery area.'], ['Trade', 'DoVyapaar needs MOQ, GST invoice terms, lead days and rate card.'], ['Hiring', 'DoRojgar roles need salary, locality, experience and shortlist owner.'], ['Documents', 'Upload GST, ID, address proof and catalog/rate card.'], ['Compliance', 'Keep the eight-line ledger above 70% before paid promotion.']] as $c) {
+        echo '<div class="feature"><h3>' . h($c[0]) . '</h3><p>' . h($c[1]) . '</p></div>';
+    }
     echo '</div></div></section>';
 } elseif ($p === 'contact') {
     echo '<section class="section soft"><div class="container"><div class="section-title"><div><h2>Contact</h2><p>A human reads this. Stored in dg_enquiries.</p></div></div><div class="card" style="max-width:36rem">';

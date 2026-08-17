@@ -15,6 +15,11 @@ function admin_boot(PDO $db): void
         flash('Site copy saved.');
         go('admin&tab=site');
     }
+    if ($act === 'reset_site') {
+        reset_public_copy();
+        flash('Public copy reset.');
+        go('admin&tab=site');
+    }
     if ($act === 'catalog') {
         setting_set('packages', trim((string) ($_POST['packages'] ?? '')));
         setting_set('price_starter', trim((string) ($_POST['price_starter'] ?? 'Free')));
@@ -91,7 +96,7 @@ function admin_render(PDO $db): void
             echo '<label>' . h($lab) . '</label>';
             echo in_array($k, ['hero_p', 'footer_blurb'], true) ? '<textarea name="' . $k . '">' . h(setting($k)) . '</textarea><br>' : '<input class="input" name="' . $k . '" value="' . h(setting($k)) . '"><br><br>';
         }
-        echo '<button class="btn" type="submit">Save copy</button></form>';
+        echo '<button class="btn" type="submit">Save copy</button></form><br><form method="post">' . csrf_fields('reset_site') . '<button class="btn light" type="submit">Reset public copy</button></form>';
     } elseif ($tab === 'catalog') {
         echo '<form method="post">' . csrf_fields('catalog') . '<label>Packages (Name | price | blurb)</label><textarea name="packages" style="min-height:160px">' . h(setting('packages')) . '</textarea><br>';
         echo '<div class="form-row"><input class="input" name="price_starter" value="' . h(setting('price_starter')) . '"><input class="input" name="price_verified" value="' . h(setting('price_verified')) . '"><input class="input" name="price_growth" value="' . h(setting('price_growth')) . '"></div><br><button class="btn" type="submit">Save</button></form>';

@@ -154,7 +154,7 @@ def cmd_files(env, args):
 
 def cmd_call(env, args):
     params = dict(p.split("=", 1) for p in args.params)
-    print(json.dumps(uapi(env, args.module, args.func, **params), indent=2)[:8000])
+    print(json.dumps(uapi(env, args.module, args.func, **params), indent=2))
 
 
 def cmd_upload(env, args):
@@ -275,6 +275,31 @@ add_action('init', function () {{
     print(f"app deployed + bootstrapped: {slug}")
 
 
+def cmd_phpapp(env, args):
+    """Upload apps/<slug> to /home/koloconi/<domain>/app."""
+    slug = args.slug
+    products = json.loads((ROOT / "products.json").read_text())
+    dest = f"{products[slug]['docroot']}/app"
+    src = ROOT / "apps" / slug
+    with tempfile.TemporaryDirectory() as td:
+        zpath = Path(td) / f"{slug}-phpapp.zip"
+        with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
+            for f in src.rglob("*"):
+                if f.is_file() and f.name != "config.local.php":
+                    z.write(f, f.relative_to(src))
+        api2(env, "Fileman", "mkdir", path=products[slug]["docroot"], name="app")
+        upload(env, zpath, "/home/koloconi/tmp", f"{slug}-phpapp.zip")
+    api2(
+        env,
+        "Fileman",
+        "fileop",
+        op="extract",
+        sourcefiles=f"/home/koloconi/tmp/{slug}-phpapp.zip",
+        destfiles=dest,
+    )
+    print("php app →", dest)
+
+
 def cmd_standalone(env, args):
     """Upload standalone MyDoApp to a cPanel directory."""
     src = ROOT / "standalone" / "mydoapp"
@@ -335,6 +360,8 @@ def main():
     p.add_argument("slug")
     p = sub.add_parser("app")
     p.add_argument("slug")
+    p = sub.add_parser("phpapp")
+    p.add_argument("slug")
     p = sub.add_parser("standalone")
     p.add_argument("dest")
     sub.add_parser("git-clone")
@@ -349,6 +376,7 @@ def main():
         "deploy": cmd_deploy,
         "activate": cmd_activate,
         "app": cmd_app,
+        "phpapp": cmd_phpapp,
         "standalone": cmd_standalone,
         "git-clone": cmd_git_clone,
     }[args.cmd](env, args)

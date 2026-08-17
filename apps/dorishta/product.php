@@ -1,0 +1,62 @@
+<?php
+return [
+    'brand' => 'DoRishta',
+    'mark' => 'R',
+    'topbar' => 'DoRishta — Family-friendly matrimonial discovery · 21+',
+    'eyebrow' => 'रिश्ता परिवार के साथ',
+    'hero_h1' => 'A family-friendly path to a life partner.',
+    'hero_p' => 'DoRishta is for adults 21 and over, with families involved. Verified profiles, expressions of interest, no dating feed.',
+    'footer_blurb' => 'Trusted, family-first matrimonial discovery. Not a dating app.',
+    'page_about' => 'DoRishta is a family-friendly matrimonial platform for adults 21+. It is not dating, not casual, and not for anyone under 21.',
+    'page_terms' => 'You must be 21 or older. Profiles are for marriage enquiry with family knowledge. Misuse, under-age accounts and dating-style solicitation are removed.',
+    'join_cta' => 'Create profile',
+    'dir_label' => 'Profiles',
+    'owner_role' => 'member',
+    'listing_label' => 'Profile',
+    'listing_table' => 'dg_profiles',
+    'owner_col' => 'user_id',
+    'title_col' => 'display_name',
+    'status_col' => 'verify_status',
+    'listing_mode' => 'one',
+    'age_min' => 21,
+    'request_table' => 'dg_interests',
+    'request_fk' => 'to_profile_id',
+    'request_label' => 'Expression of interest',
+    'fields' => [
+        ['display_name', 'Display name', 'text', true],
+        ['birth_date', 'Date of birth', 'date', true],
+        ['city', 'City', 'text', true],
+        ['community', 'Community (optional)', 'text', false],
+        ['education', 'Education', 'text', false],
+        ['occupation', 'Occupation', 'text', false],
+        ['family_note', 'Family note', 'text', false],
+        ['about', 'About the family / self', 'textarea', false],
+    ],
+    'nav_extra' => [
+        ['matches', 'Find matches'],
+        ['complete', 'Complete profile'],
+        ['membership', 'Membership'],
+        ['safety', 'Safety'],
+    ],
+    'hero_extra' => [
+        ['matches', 'Find matches'],
+        ['safety', 'Safety promise'],
+    ],
+    'dash_extra' => [
+        'complete' => 'Complete profile',
+    ],
+    'request_fields' => [
+        ['note', 'Note to the family', 'textarea', true],
+    ],
+    'docs' => [
+        'id' => 'Government ID (21+)',
+        'address' => 'Address proof',
+        'family' => 'Family introduction letter',
+    ],
+    'packages' => 'Verified profile | ₹999 | ID review by staff.
+Family introduction | ₹1,499 | Guided first note.
+Membership | ₹2,999 | Priority listing for 90 days.',
+    'slug' => 'dorishta',
+    'page_privacy' => 'We store the account, listing, documents and requests you submit. Staff see them to verify and support you. We do not sell your data. Write to the contact email to request deletion.',
+    'contact_email' => 'hello@dorishta.com',
+];

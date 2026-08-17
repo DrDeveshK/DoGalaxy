@@ -72,8 +72,31 @@ function migrate_sqlite(PDO $pdo): void
             $rcols .= ', ' . $f[0] . ' TEXT';
         }
         $pdo->exec('CREATE TABLE IF NOT EXISTS ' . $P['request_table'] . ' (' . $rcols . ')');
+        ensure_columns($pdo, $P['listing_table'], array_column($P['fields'], 0));
+        ensure_columns($pdo, $P['request_table'], array_column($P['request_fields'], 0));
+    }
+    if (function_exists('product_migrate')) {
+        product_migrate($pdo);
     }
     seed_platform($pdo);
+}
+
+function ensure_columns(PDO $pdo, string $table, array $cols): void
+{
+    $have = [];
+    try {
+        foreach ($pdo->query('PRAGMA table_info(' . $table . ')') as $r) {
+            $have[$r['name']] = true;
+        }
+    } catch (Throwable $e) {
+        return;
+    }
+    foreach ($cols as $c) {
+        $c = preg_replace('/[^a-z0-9_]/', '', (string) $c);
+        if ($c !== '' && empty($have[$c])) {
+            $pdo->exec('ALTER TABLE ' . $table . ' ADD COLUMN ' . $c . ' TEXT');
+        }
+    }
 }
 
 function seed_platform(PDO $pdo): void
@@ -117,6 +140,15 @@ function default_settings(): array
         'page_privacy' => $P['page_privacy'],
         'page_terms' => $P['page_terms'],
     ];
+}
+
+function reset_public_copy(): void
+{
+    foreach (default_settings() as $k => $v) {
+        if (in_array($k, ['brand', 'topbar', 'eyebrow', 'hero_h1', 'hero_p', 'services_intro', 'footer_blurb'], true)) {
+            setting_set($k, $v);
+        }
+    }
 }
 
 function setting(string $k, string $fallback = ''): string
@@ -258,7 +290,11 @@ function save_upload(string $field, int $lid, string $code): ?string
 function dash_nav(string $on = 'dash'): string
 {
     $html = '<aside class="dash-nav">';
-    foreach (['dash' => 'Dashboard', 'docs' => 'Documents', 'inbox' => 'Inbox', 'orders' => 'Requests', 'notices' => 'Notifications', 'account' => 'Account'] as $k => $lab) {
+    $items = ['dash' => 'Dashboard', 'docs' => 'Documents', 'inbox' => 'Inbox', 'orders' => 'Requests', 'notices' => 'Notifications', 'account' => 'Account'];
+    foreach ((product()['dash_extra'] ?? []) as $k => $lab) {
+        $items[$k] = $lab;
+    }
+    foreach ($items as $k => $lab) {
         $html .= '<a href="?p=' . $k . '"' . ($on === $k ? ' class="on"' : '') . '>' . $lab . '</a>';
     }
     return $html . '<a href="?p=dir">Directory</a></aside>';
@@ -393,16 +429,21 @@ function shell_start(string $title = ''): void
     $brand = setting('brand', $P['brand']);
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
     echo '<title>' . h($title ?: $brand) . '</title><link rel="stylesheet" href="assets/app.css"></head><body>';
+    echo '<a class="skip-link" href="#main">Skip to content</a>';
     echo '<div class="topbar"><div class="container"><span>' . h(setting('topbar', $P['topbar'])) . '</span><span>Kusumit Universe · MyDoApp</span></div></div>';
     echo '<header class="site-header"><div class="container header-inner">';
     echo '<a class="brand" href="?p=home"><span class="brand-mark">' . h($P['mark']) . '<span>o</span></span><span>' . h($brand) . '</span></a>';
     echo '<nav class="nav" id="mainNav"><a href="?p=home">Home</a>';
     if (($P['mode'] ?? '') !== 'hub') {
-        echo '<a href="?p=dir">' . h($P['dir_label']) . '</a><a href="?p=services">Services</a><a href="?p=pricing">Pricing</a>';
+        echo '<a href="?p=dir">' . h($P['dir_label']) . '</a>';
+        foreach ($P['nav_extra'] ?? [] as $n) {
+            echo '<a href="?p=' . h($n[0]) . '">' . h($n[1]) . '</a>';
+        }
+        echo '<a href="?p=services">Services</a><a href="?p=pricing">Pricing</a>';
     } else {
         echo '<a href="?p=products">Products</a>';
     }
-    echo '<a href="?p=contact">Contact</a>';
+    echo '<a href="?p=guide">Ask Do</a><a href="?p=contact">Contact</a>';
     if ($me) {
         echo is_admin() ? '<a href="?p=admin">Admin</a>' : '<a href="?p=dash">Dashboard</a><a href="?p=notices">Alerts' . (unseen_n(db()) ? ' (' . unseen_n(db()) . ')' : '') . '</a>';
         echo '<form method="post">' . csrf_fields('logout') . '<button type="submit">Log out</button></form>';
@@ -410,16 +451,36 @@ function shell_start(string $title = ''): void
         echo '<a href="?p=login">Log in</a>';
     }
     echo '</nav><button class="btn light mobile-toggle" type="button" onclick="document.getElementById(\'mainNav\').classList.toggle(\'open\')">Menu</button>';
-    echo '<a class="btn" href="?p=join">' . h($P['join_cta']) . '</a></div></header>';
+    echo '<a class="btn" href="?p=join">' . h($P['join_cta']) . '</a></div></header><main id="main">';
 }
 
 function shell_end(): void
 {
     $P = product();
-    echo '<footer class="footer"><div class="container footer-grid">';
+    echo '</main><footer class="footer"><div class="container footer-grid">';
     echo '<div><h3>' . h(setting('brand', $P['brand'])) . '</h3><p>' . h(setting('footer_blurb', $P['footer_blurb'])) . '</p></div>';
-    echo '<div><h4>Platform</h4><a href="?p=dir">' . h($P['dir_label'] ?? 'Directory') . '</a><a href="?p=services">Services</a><a href="?p=pricing">Pricing</a></div>';
-    echo '<div><h4>Do Galaxy</h4><a href="https://mydoapp.com">MyDoApp</a><a href="https://doudyog.com">DoUdyog</a><a href="https://dorojgar.com">DoRojgar</a><a href="https://dobajar.com">DoBajar</a></div>';
+    echo '<div><h4>Platform</h4>';
+    if (($P['mode'] ?? '') === 'hub') {
+        echo '<a href="?p=products">Products</a><a href="?p=guide">Ask Do</a>';
+    } else {
+        echo '<a href="?p=dir">' . h($P['dir_label'] ?? 'Directory') . '</a>';
+        foreach ($P['nav_extra'] ?? [] as $n) {
+            echo '<a href="?p=' . h($n[0]) . '">' . h($n[1]) . '</a>';
+        }
+        echo '<a href="?p=services">Services</a><a href="?p=pricing">Pricing</a><a href="?p=guide">Ask Do</a>';
+    }
+    echo '</div>';
+    echo '<div><h4>Do Galaxy</h4>';
+    guide_render_footer_links();
+    echo '</div>';
     echo '<div><h4>Company</h4><a href="?p=about">About</a><a href="?p=privacy">Privacy</a><a href="?p=terms">Terms</a><a href="?p=contact">Contact</a></div></div>';
-    echo '<div class="container" style="border-top:1px solid rgba(255,255,255,.12);margin-top:28px;padding-top:18px;color:#91a8c8">© ' . date('Y') . ' ' . h($P['brand']) . '. A Kusumit Universe initiative.</div></footer></body></html>';
+    echo '<div class="container" style="border-top:1px solid rgba(255,255,255,.12);margin-top:28px;padding-top:18px;color:#91a8c8">© ' . date('Y') . ' ' . h($P['brand']) . '. A Kusumit Universe initiative.</div></footer>';
+    guide_widget($P['slug']);
+    echo '</body></html>';
+}
+
+require_once __DIR__ . '/guide.php';
+
+if (is_file(DG_APP . '/pages.php')) {
+    require_once DG_APP . '/pages.php';
 }
