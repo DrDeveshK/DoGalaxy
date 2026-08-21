@@ -44,6 +44,8 @@ return [
 Wedding desk | ₹4,999 | Venue + caterer + decor shortlist.
 Corporate meet | ₹2,999 | Half-day package help.',
     'nav_extra' => [
+        ['swipe', 'Shortlist venues'],
+        ['shortlist', 'My shortlist'],
         ['brief', 'Event brief'],
         ['packages', 'Event packages'],
         ['track', 'Track request'],
@@ -51,6 +53,7 @@ Corporate meet | ₹2,999 | Half-day package help.',
         ['promise', 'Swagat Promise'],
     ],
     'hero_extra' => [
+        ['swipe', 'Shortlist venues'],
         ['packages', 'Event packages'],
         ['track', 'Track a request'],
     ],

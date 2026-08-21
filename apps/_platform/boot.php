@@ -102,6 +102,9 @@ function migrate_mysql(PDO $pdo): void
         $pdo->exec('CREATE TABLE IF NOT EXISTS `dg_projects` (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id BIGINT UNSIGNED NOT NULL, title TEXT NOT NULL, city TEXT NULL, stage VARCHAR(80) NOT NULL DEFAULT \'brief\', note TEXT NULL, estimate_id BIGINT UNSIGNED NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
         $pdo->exec('CREATE TABLE IF NOT EXISTS `dg_articles` (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, slug VARCHAR(190) NOT NULL UNIQUE, category TEXT NOT NULL, title TEXT NOT NULL, body TEXT NOT NULL, icon TEXT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
     }
+    if (function_exists('product_migrate')) {
+        product_migrate($pdo);
+    }
 }
 
 function mysql_ident(string $s): string
@@ -564,6 +567,7 @@ function shell_end(): void
 }
 
 require_once __DIR__ . '/guide.php';
+require_once __DIR__ . '/swipe.php';
 
 if (is_file(DG_APP . '/pages.php')) {
     require_once DG_APP . '/pages.php';

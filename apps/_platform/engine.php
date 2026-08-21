@@ -193,6 +193,9 @@ function run_app(): void
     $db = db();
     $err = '';
     $page = (string) ($_GET['p'] ?? 'home');
+    if ($page === 'swipeimg') {
+        swipe_send_photo();
+    }
     if ($page === 'guide') {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             guide_json_response($db, $P['slug']);

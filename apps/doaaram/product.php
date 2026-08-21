@@ -47,12 +47,15 @@ Handyman visit pack | ₹1,999 | Plumbing, electrical or carpentry visit request
 Home deep clean | ₹2,999 | Kitchen, bathroom or full-home cleaning request.
 Family care desk | ₹2,999 | Elder-care or nurse matching.',
     'nav_extra' => [
+        ['swipe', 'Shortlist a pro'],
+        ['shortlist', 'My shortlist'],
         ['categories', 'Service categories'],
         ['packs', 'Service packs'],
         ['care', 'Family care desk'],
         ['track', 'Track booking'],
     ],
     'hero_extra' => [
+        ['swipe', 'Shortlist a pro'],
         ['categories', 'Book a service'],
     ],
     'slug' => 'doaaram',

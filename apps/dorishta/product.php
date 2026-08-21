@@ -33,12 +33,14 @@ return [
         ['about', 'About the family / self', 'textarea', false],
     ],
     'nav_extra' => [
+        ['swipe', 'Review cards'],
         ['matches', 'Find matches'],
         ['complete', 'Complete profile'],
         ['membership', 'Membership'],
         ['safety', 'Safety'],
     ],
     'hero_extra' => [
+        ['swipe', 'Review one by one'],
         ['matches', 'Find matches'],
         ['safety', 'Safety promise'],
     ],

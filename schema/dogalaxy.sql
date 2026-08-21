@@ -104,6 +104,51 @@ CREATE TABLE IF NOT EXISTS dg_stays (
   CONSTRAINT fk_stay_host FOREIGN KEY (host_id) REFERENCES dg_users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS dg_places (
+  id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  kind          VARCHAR(32) NOT NULL,
+  title         VARCHAR(180) NOT NULL,
+  city          VARCHAR(80) NOT NULL,
+  area          VARCHAR(120) NULL,
+  tagline       VARCHAR(190) NULL,
+  about         TEXT NULL,
+  stay_id       BIGINT UNSIGNED NULL,
+  photo         VARCHAR(190) NULL,
+  featured      TINYINT NOT NULL DEFAULT 0,
+  created_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_place_title_city (title, city),
+  KEY ix_place_kind (kind, city),
+  CONSTRAINT fk_place_stay FOREIGN KEY (stay_id) REFERENCES dg_stays (id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS dg_place_likes (
+  id         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id    BIGINT UNSIGNED NOT NULL,
+  place_id   BIGINT UNSIGNED NOT NULL,
+  verdict    ENUM('like','pass') NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_place_like (user_id, place_id),
+  KEY ix_place_liked (place_id, verdict),
+  CONSTRAINT fk_plike_user FOREIGN KEY (user_id) REFERENCES dg_users (id) ON DELETE CASCADE,
+  CONSTRAINT fk_plike_place FOREIGN KEY (place_id) REFERENCES dg_places (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS dg_swipes (
+  id         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  product    VARCHAR(40) NOT NULL,
+  entity     VARCHAR(40) NOT NULL,
+  user_id    BIGINT UNSIGNED NOT NULL,
+  target_id  BIGINT UNSIGNED NOT NULL,
+  verdict    ENUM('like','pass') NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_swipe (product, entity, user_id, target_id),
+  KEY ix_swipe_target (product, entity, target_id, verdict),
+  CONSTRAINT fk_swipe_user FOREIGN KEY (user_id) REFERENCES dg_users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS dg_stay_requests (
   id         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   stay_id    BIGINT UNSIGNED NOT NULL,

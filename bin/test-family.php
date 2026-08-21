@@ -82,18 +82,26 @@ if ($slug === 'doswagat') {
     ok('event packages', $c === 200 && str_contains($h, 'Wedding desk'));
     [$c, $h] = req("$base/?p=track");
     ok('track request', $c === 200 && str_contains($h, 'Track'));
+    [$c, $h] = req("$base/?p=swipe");
+    ok('venue swipe', $c === 200 && str_contains($h, 'Shortlist venues'));
 }
 if ($slug === 'dorishta') {
     [$c, $h] = req("$base/?p=matches&city=Pune&education=MBA");
     ok('find matches', $c === 200 && str_contains($h, 'Find matches') && str_contains($h, '21+'));
     [$c, $h] = req("$base/?p=safety");
     ok('safety promise', $c === 200 && str_contains($h, '21+'));
+    [$c, $h] = req("$base/?p=swipe");
+    ok('profile cards', $c === 200 && str_contains($h, 'Review profiles') && str_contains($h, '21+') && str_contains($h, 'Not dating'));
 }
 if ($slug === 'dovishram') {
     [$c, $h] = req("$base/?p=find&type=Homestay&guests=2");
     ok('stay filters', $c === 200 && str_contains($h, 'Find stays'));
     [$c, $h] = req("$base/?p=packages");
     ok('rest packages', $c === 200 && str_contains($h, 'Weekend rest'));
+    [$c, $h] = req("$base/?p=swipe");
+    ok('place swipe', $c === 200 && str_contains($h, 'Swipe places') && str_contains($h, 'swipe-photo') && preg_match('/(\d+) places left/', $h, $m) && (int) $m[1] >= 40);
+    [$c, $h] = req("$base/?p=popular");
+    ok('place likes board', $c === 200 && str_contains($h, 'Who wants to visit'));
 }
 if ($slug === 'doaaram') {
     [$c, $h] = req("$base/?p=categories&cat=Plumbing");
@@ -108,6 +116,8 @@ if ($slug === 'doaaram') {
     ok('visit packs', $c === 200 && str_contains($h, 'Handyman visit pack'));
     [$c, $h] = req("$base/?p=care");
     ok('care desk', $c === 200 && str_contains($h, 'Family care desk'));
+    [$c, $h] = req("$base/?p=swipe");
+    ok('pro swipe', $c === 200 && str_contains($h, 'Shortlist a pro'));
 }
 if ($slug === 'dobajar') {
     [$c, $h] = req("$base/?p=shop");
@@ -165,6 +175,19 @@ if ($slug !== 'mydoapp') {
     ok('owner login', $c === 200 && str_contains($h, 'Dashboard'));
     [$c, $h] = req("$base/?p=inbox");
     ok('owner inbox', $c === 200 && (str_contains($h, 'Guest') || str_contains($h, 'inbox') || str_contains($h, 'Inbox') || str_contains($h, 'Application') || str_contains($h, 'Request')));
+    if ($slug === 'dovishram') {
+        [$c, $h] = req("$base/?p=swipe");
+        $t = csrf($h);
+        $pid = preg_match('/name="place_id" value="(\d+)"/', $h, $m) ? $m[1] : '0';
+        [$c, $h] = req("$base/?p=swipe", [CURLOPT_POST => true, CURLOPT_POSTFIELDS => http_build_query([
+            'csrf' => $t, 'act' => 'swipe', 'place_id' => $pid, 'verdict' => 'like',
+        ])]);
+        ok('swipe like', $c === 200 && $pid !== '0');
+        [$c, $h] = req("$base/?p=wants");
+        ok('want to visit', $c === 200 && str_contains($h, 'Want to visit'));
+        [$c, $h] = req("$base/?p=popular");
+        ok('like counted', $c === 200 && str_contains($h, '1 want this'));
+    }
 }
 
 echo $fail === 0 ? "\n$slug ALL PASS\n" : "\n$slug $fail FAILED\n";

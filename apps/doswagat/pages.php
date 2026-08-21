@@ -13,6 +13,34 @@ function ds_packs(): array
 
 function product_migrate(PDO $pdo): void
 {
+    swipe_migrate($pdo);
+    $oid = swipe_staff_id($pdo);
+    $chk = $pdo->prepare('SELECT id FROM dg_venues WHERE title=? AND city=?');
+    $ins = $pdo->prepare('INSERT INTO dg_venues (partner_id, title, kind, city, capacity, about, verify_status, featured) VALUES (?,?,?,?,?,?,?,?)');
+    foreach ([
+        ['Marigold Lawn', 'Lawn', 'Jaipur', '500', 'Open lawn, stage and a separate kitchen block for 500.'],
+        ['Amber Courtyard', 'Banquet', 'Jaipur', '180', 'Heritage courtyard hall for mehndi and dinner.'],
+        ['Lakeview Banquet', 'Hotel', 'Udaipur', '220', 'Hotel banquet with lake-facing lawn for pheras.'],
+        ['Pearl Ballroom', 'Banquet', 'Indore', '300', 'AC ballroom, in-house buffet and valet.'],
+        ['Green Pavilion', 'Lawn', 'Pune', '400', 'Shaded lawn plus a monsoon backup hall.'],
+        ['Harbour Terrace', 'Hotel', 'Mumbai', '150', 'Terrace hotel venue for cocktails and a sit-down.'],
+        ['White City Lawn', 'Lawn', 'Udaipur', '350', 'Palace-town lawn with string lights.'],
+        ['Saffron Kitchen', 'Caterer', 'Jaipur', '800', 'Rajasthani and pan-Indian thali for 200–800.'],
+        ['Coastal Thali Co', 'Caterer', 'Goa', '250', 'Fish, veg and live counters for a beach wedding.'],
+        ['Floral Atelier', 'Decorator', 'Delhi', '—', 'Mandap, stage and entrance florals.'],
+        ['Marigold & Mirror', 'Decorator', 'Jaipur', '—', 'Heritage décor, phoolon ki chaadar, brass.'],
+        ['Lens & Vow', 'Photographer', 'Delhi', '—', 'Wedding day + next-morning portraits.'],
+        ['Studio Saat', 'Photographer', 'Mumbai', '—', 'Candid and film for city weddings.'],
+        ['Indigo Hall', 'Banquet', 'Bengaluru', '200', 'Tech-city banquet with AV already in the room.'],
+        ['Ghat Lawn', 'Lawn', 'Varanasi', '180', 'River-side lawn for a small phera set.'],
+        ['Charminar Terrace', 'Hotel', 'Hyderabad', '120', 'Old-city hotel terrace for nikaah or reception.'],
+    ] as $r) {
+        $chk->execute([$r[0], $r[2]]);
+        if ($chk->fetch()) {
+            continue;
+        }
+        $ins->execute([$oid, $r[0], $r[1], $r[2], $r[3], $r[4], 'verified', 1]);
+    }
 }
 
 function product_seed(PDO $db): void
@@ -21,6 +49,9 @@ function product_seed(PDO $db): void
 
 function product_handle_post(PDO $db, string $act, string &$err): bool
 {
+    if ($act === 'swipe') {
+        return swipe_handle($db, 'venue', $err);
+    }
     if ($act === 'event_brief') {
         $name = trim((string) ($_POST['name'] ?? ''));
         $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
@@ -51,6 +82,45 @@ function product_handle_post(PDO $db, string $act, string &$err): bool
 
 function product_render_page(PDO $db, string $page, array $P, ?array $me): bool
 {
+    if ($page === 'swipe') {
+        $kind = (string) ($_GET['kind'] ?? '');
+        $sql = "SELECT * FROM dg_venues WHERE verify_status IN ('pending','verified')";
+        $args = [];
+        if ($kind !== '') {
+            $sql .= ' AND kind=?';
+            $args[] = $kind;
+        }
+        $sql .= ' ORDER BY featured DESC, id ASC';
+        $deck = swipe_deck($db, $sql, $args, 'venue', $me);
+        swipe_render([
+            'h2' => 'Shortlist venues',
+            'lede' => 'Right = shortlist this hall, lawn, caterer or photographer. Then send one event brief.',
+            'kind' => $kind,
+            'filters' => ['Lawn' => 'Lawn', 'Banquet' => 'Banquet', 'Hotel' => 'Hotel', 'Caterer' => 'Caterer', 'Decorator' => 'Decorator', 'Photographer' => 'Photographer'],
+            'side' => ['?p=shortlist', 'My shortlist'],
+            'done' => '?p=shortlist',
+            'yes_stamp' => 'Shortlist',
+            'card' => function (array $r) use ($db) {
+                return swipe_card_html($r, [
+                    'title_col' => 'title',
+                    'kicker' => ($r['kind'] ?? 'Venue') . ' · ' . ($r['capacity'] ?? '') . ' guests',
+                    'where' => (string) ($r['city'] ?? ''),
+                    'tag' => (string) ($r['about'] ?? ''),
+                    'photo' => swipe_photo_src((string) ($r['city'] ?? '')),
+                    'likes' => swipe_like_n($db, 'venue', (int) $r['id']),
+                    'show_likes' => true,
+                    'like_label' => 'shortlisted this',
+                ]);
+            },
+        ], $deck, $me);
+        return true;
+    }
+    if ($page === 'shortlist') {
+        swipe_wants($db, 'venue', 'dg_venues', 'title', function (array $r) {
+            return '<div class="biz-card"><div class="meta"><span>' . h($r['kind'] ?? '') . '</span><span>' . h($r['city'] ?? '') . '</span></div><h3><a href="?p=view&id=' . (int) $r['id'] . '">' . h($r['title']) . '</a></h3><p>' . h($r['about'] ?? '') . '</p><p><a class="btn light" href="?p=view&id=' . (int) $r['id'] . '">Send brief</a></p></div>';
+        });
+        return true;
+    }
     if ($page === 'brief') {
         echo '<section class="section soft"><div class="container"><div class="card" style="max-width:44rem"><h2>Event brief wizard</h2><p>WeddingWire-style intake: date, city, guest count, budget and event type in one request.</p>';
         echo '<form method="post">' . csrf_fields('event_brief');

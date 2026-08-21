@@ -3,6 +3,32 @@ declare(strict_types=1);
 
 function product_migrate(PDO $pdo): void
 {
+    swipe_migrate($pdo);
+    $oid = swipe_staff_id($pdo);
+    $chk = $pdo->prepare('SELECT id FROM dg_services WHERE title=? AND city=?');
+    $ins = $pdo->prepare('INSERT INTO dg_services (provider_id, title, category, city, area, rate, experience, about, status, featured) VALUES (?,?,?,?,?,?,?,?,?,?)');
+    foreach ([
+        ['Leak and tap repair', 'Plumbing', 'Pune', 'Kothrud', '₹499 visit', '8 yrs verified', 'Taps, flush, geyser inlet and visible leak fix.'],
+        ['Night plumber desk', 'Plumbing', 'Delhi', 'Dwarka', '₹799 visit', 'Police verified', 'Same-evening leak and blockage visits.'],
+        ['Fan and switchboard', 'Electrical', 'Delhi', 'Rohini', '₹399 visit', 'Licence on file', 'Fans, lights, MCBs and a short safety note.'],
+        ['Inverter and wiring check', 'Electrical', 'Jaipur', 'Mansarovar', '₹599 visit', '10 yrs', 'Home wiring check before summer load.'],
+        ['Door and hinge carpenter', 'Carpentry', 'Pune', 'Baner', '₹449 visit', 'ID verified', 'Doors, hinges, shelves and a small wood fix.'],
+        ['Kitchen cabinet repair', 'Carpentry', 'Bengaluru', 'Indiranagar', '₹699 visit', 'Verified', 'Soft-close, handles and a warped shutter.'],
+        ['Bathroom deep clean', 'Cleaning', 'Jaipur', 'C-Scheme', '₹1,299', 'Trained pair', 'Two-person bathroom and kitchen clean.'],
+        ['Sofa shampoo visit', 'Cleaning', 'Mumbai', 'Andheri', '₹999', 'Kit included', 'Sofa and mattress shampoo, same-day dry.'],
+        ['Cockroach and pest visit', 'Pest control', 'Hyderabad', 'Banjara Hills', '₹1,499', 'Licensed spray', 'Kitchen + drain gel, with a 30-day note.'],
+        ['Home salon — women', 'Beauty & wellness', 'Delhi', 'Saket', '₹799', 'Kit + ID', 'Cleanup, threading, blow-dry at home.'],
+        ['Elder companion half-day', 'Home care', 'Indore', 'Vijay Nagar', '₹700 / half', 'ID verified', 'Meals, walk, medicine reminder. Not a clinic.'],
+        ['Physio at home (non-emergency)', 'Home care', 'Pune', 'Aundh', '₹1,100 visit', 'Certified', 'Mobility session at home. Not an ambulance.'],
+        ['AC and appliance check', 'Appliance repair', 'Bengaluru', 'Whitefield', '₹499 visit', 'Brand-agnostic', 'Window/split AC service visit.'],
+        ['Fridge gas and seal', 'Appliance repair', 'Kolkata', 'Salt Lake', '₹599 visit', 'Verified', 'Cooling complaint, gasket and a quote.'],
+    ] as $r) {
+        $chk->execute([$r[0], $r[2]]);
+        if ($chk->fetch()) {
+            continue;
+        }
+        $ins->execute([$oid, $r[0], $r[1], $r[2], $r[3], $r[4], $r[5], $r[6], 'live', 1]);
+    }
 }
 
 function product_seed(PDO $db): void
@@ -25,6 +51,9 @@ function product_seed(PDO $db): void
 
 function product_handle_post(PDO $db, string $act, string &$err): bool
 {
+    if ($act === 'swipe') {
+        return swipe_handle($db, 'service', $err);
+    }
     if ($act === 'book_pack') {
         $item = trim((string) ($_POST['item'] ?? ''));
         if ($item === '') {
@@ -74,6 +103,45 @@ function product_handle_post(PDO $db, string $act, string &$err): bool
 
 function product_render_page(PDO $db, string $page, array $P, ?array $me): bool
 {
+    if ($page === 'swipe') {
+        $kind = (string) ($_GET['kind'] ?? '');
+        $sql = "SELECT * FROM dg_services WHERE status IN ('pending','live','verified')";
+        $args = [];
+        if ($kind !== '') {
+            $sql .= ' AND category=?';
+            $args[] = $kind;
+        }
+        $sql .= ' ORDER BY featured DESC, id ASC';
+        $deck = swipe_deck($db, $sql, $args, 'service', $me);
+        swipe_render([
+            'h2' => 'Shortlist a pro',
+            'lede' => 'Right = shortlist this visit. Then book a slot. Not an emergency line.',
+            'kind' => $kind,
+            'filters' => ['Plumbing' => 'Plumbing', 'Electrical' => 'Electrical', 'Carpentry' => 'Carpentry', 'Cleaning' => 'Cleaning', 'Home care' => 'Home care', 'Beauty & wellness' => 'Beauty'],
+            'side' => ['?p=shortlist', 'My shortlist'],
+            'done' => '?p=shortlist',
+            'yes_stamp' => 'Shortlist',
+            'card' => function (array $r) use ($db) {
+                return swipe_card_html($r, [
+                    'title_col' => 'title',
+                    'kicker' => ($r['category'] ?? 'Service') . ' · ' . ($r['rate'] ?? ''),
+                    'where' => trim(($r['area'] ?? '') . ' · ' . ($r['city'] ?? ''), ' ·'),
+                    'tag' => (string) ($r['about'] ?? ''),
+                    'photo' => swipe_photo_src((string) ($r['city'] ?? '')),
+                    'likes' => swipe_like_n($db, 'service', (int) $r['id']),
+                    'show_likes' => true,
+                    'like_label' => 'shortlisted this',
+                ]);
+            },
+        ], $deck, $me);
+        return true;
+    }
+    if ($page === 'shortlist') {
+        swipe_wants($db, 'service', 'dg_services', 'title', function (array $r) {
+            return '<div class="biz-card"><div class="meta"><span>' . h($r['category'] ?? '') . '</span><span>' . h($r['city'] ?? '') . '</span></div><h3><a href="?p=view&id=' . (int) $r['id'] . '">' . h($r['title']) . '</a></h3><p>' . h($r['rate'] ?? '') . '</p><p><a class="btn light" href="?p=view&id=' . (int) $r['id'] . '">Book visit</a></p></div>';
+        });
+        return true;
+    }
     if ($page === 'categories') {
         $cats = [
             ['Plumbing', 'Leaks, taps, flush, bathroom fittings', 'from ₹399'],

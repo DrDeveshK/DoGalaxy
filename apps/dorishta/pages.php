@@ -3,6 +3,37 @@ declare(strict_types=1);
 
 function product_migrate(PDO $pdo): void
 {
+    swipe_migrate($pdo);
+    $hash = password_hash('SeedPass9', PASSWORD_DEFAULT);
+    foreach ([
+        ['swipe1@dorishta.local', 'Kavya R.', '1997-04-18', 'Bengaluru', 'Open', 'M.Sc', 'Research', 'Parents in Mysore', 'Researcher. Wants a partner who reads and travels slowly.'],
+        ['swipe2@dorishta.local', 'Arjun P.', '1994-09-09', 'Pune', 'Open', 'MBA', 'Operations', 'Joint family', 'Operations manager. Family meeting before a long call.'],
+        ['swipe3@dorishta.local', 'Sara M.', '1998-12-01', 'Hyderabad', 'Open', 'B.Arch', 'Architect', 'Families may write', 'Architect. Quiet evenings, no dating-app tone.'],
+        ['swipe4@dorishta.local', 'Dev K.', '1993-06-22', 'Delhi', 'Open', 'CA', 'Finance', 'Parents involved', 'CA in practice. Prefers a family introduction.'],
+        ['swipe5@dorishta.local', 'Meera T.', '1999-02-14', 'Jaipur', 'Open', 'B.A.', 'Teacher', 'Joint family', 'Teaches. Values honesty and Sunday lunch at home.'],
+        ['swipe6@dorishta.local', 'Farhan S.', '1995-08-03', 'Mumbai', 'Open', 'B.Tech', 'Product', 'Family first', 'Product role. Looking for a kind, working partner.'],
+        ['swipe7@dorishta.local', 'Ananya L.', '1996-11-27', 'Kolkata', 'Open', 'M.A.', 'Editor', 'Parents in Howrah', 'Editor. Books, trams, and a slow introduction.'],
+        ['swipe8@dorishta.local', 'Rohit G.', '1992-01-19', 'Indore', 'Open', 'B.Com', 'Family firm', 'Family meeting first', 'Runs a shop with his father. Direct, not flashy.'],
+        ['swipe9@dorishta.local', 'Isha N.', '1997-07-07', 'Chandigarh', 'Open', 'MBBS intern', 'Medicine', 'Families may write first', 'Medicine intern. 21+. Family-first, not casual.'],
+        ['swipe10@dorishta.local', 'Vikram D.', '1994-03-30', 'Ahmedabad', 'Open', 'B.E.', 'Manufacturing', 'Joint family', 'Plant engineer. Wants a partner who can meet the family.'],
+        ['swipe11@dorishta.local', 'Zoya H.', '1998-05-21', 'Lucknow', 'Open', 'LLB', 'Law', 'Parents involved', 'Junior counsel. Prefers a written interest note.'],
+        ['swipe12@dorishta.local', 'Nikhil B.', '1995-10-11', 'Nagpur', 'Open', 'B.Sc', 'Agri-business', 'Family farm', 'Agri-business. Evenings at home, not a chat wall.'],
+    ] as $r) {
+        $st = $pdo->prepare('SELECT id FROM dg_users WHERE email=?');
+        $st->execute([$r[0]]);
+        $uid = (int) $st->fetchColumn();
+        if (!$uid) {
+            $pdo->prepare('INSERT INTO dg_users (email, password_hash, name, role, status) VALUES (?,?,?,?,?)')->execute([$r[0], $hash, $r[1], 'member', 'active']);
+            $uid = (int) $pdo->lastInsertId();
+        }
+        $st = $pdo->prepare('SELECT id FROM dg_profiles WHERE user_id=?');
+        $st->execute([$uid]);
+        if ($st->fetch()) {
+            continue;
+        }
+        $pdo->prepare('INSERT INTO dg_profiles (user_id, display_name, birth_date, city, community, education, occupation, family_note, about, verify_status, featured) VALUES (?,?,?,?,?,?,?,?,?,?,?)')
+            ->execute([$uid, $r[1], $r[2], $r[3], $r[4], $r[5], $r[6], $r[7], $r[8], 'verified', 1]);
+    }
 }
 
 function product_seed(PDO $db): void
@@ -11,6 +42,9 @@ function product_seed(PDO $db): void
 
 function product_handle_post(PDO $db, string $act, string &$err): bool
 {
+    if ($act === 'swipe') {
+        return swipe_handle($db, 'profile', $err, 'view&id=');
+    }
     return false;
 }
 
@@ -25,6 +59,55 @@ function dr_age(?string $bd): int
 
 function product_render_page(PDO $db, string $page, array $P, ?array $me): bool
 {
+    if ($page === 'swipe') {
+        $kind = (string) ($_GET['kind'] ?? '');
+        $sql = "SELECT * FROM dg_profiles WHERE verify_status IN ('pending','verified')";
+        $args = [];
+        if ($me) {
+            $sql .= ' AND user_id<>?';
+            $args[] = $me['id'];
+        }
+        if ($kind !== '') {
+            $sql .= ' AND city=?';
+            $args[] = $kind;
+        }
+        $sql .= ' ORDER BY featured DESC, id ASC';
+        $raw = swipe_deck($db, $sql, $args, 'profile', $me);
+        $deck = [];
+        foreach ($raw as $r) {
+            $age = dr_age($r['birth_date'] ?? null);
+            if ($age && $age < 21) {
+                continue;
+            }
+            $r['_age'] = $age;
+            $deck[] = $r;
+        }
+        swipe_render([
+            'h2' => 'Review profiles',
+            'lede' => 'One card at a time. Skip, or open the profile to send a family interest note. Not dating. 21+ only.',
+            'notice' => 'DoRishta is family-first. Interest is private — not a public like count.',
+            'kind' => $kind,
+            'filters' => ['Pune' => 'Pune', 'Jaipur' => 'Jaipur', 'Delhi' => 'Delhi', 'Bengaluru' => 'Bengaluru', 'Mumbai' => 'Mumbai'],
+            'side' => ['?p=matches', 'Filter list'],
+            'done' => '?p=matches',
+            'login_msg' => 'Log in to skip or send interest. You must be 21+.',
+            'yes_mark' => '✓',
+            'yes_stamp' => 'Interest',
+            'no_stamp' => 'Skip',
+            'card' => function (array $r) {
+                $age = (int) ($r['_age'] ?? 0);
+                return swipe_card_html($r, [
+                    'title_col' => 'display_name',
+                    'kicker' => '21+ · ' . ($r['verify_status'] ?? ''),
+                    'where' => trim(($age ? $age . ' · ' : '') . ($r['city'] ?? '') . ' · ' . ($r['occupation'] ?? ''), ' ·'),
+                    'tag' => trim(($r['education'] ?? '') . ' · ' . ($r['family_note'] ?? ''), ' ·'),
+                    'avatar' => true,
+                    'show_likes' => false,
+                ]);
+            },
+        ], $deck, $me);
+        return true;
+    }
     if ($page === 'matches') {
         $q = trim((string) ($_GET['q'] ?? ''));
         $city = trim((string) ($_GET['city'] ?? ''));

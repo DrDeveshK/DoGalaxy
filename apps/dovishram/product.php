@@ -46,11 +46,14 @@ return [
 Weekend rest package | ₹1,999 | Curated 2-night stay help.
 Host onboarding | ₹2,499 | Photos, house rules, calendar.',
     'nav_extra' => [
+        ['swipe', 'Swipe places'],
+        ['wants', 'Want to visit'],
         ['find', 'Find stays'],
         ['packages', 'Rest packages'],
         ['track', 'Track booking'],
     ],
     'hero_extra' => [
+        ['swipe', 'Swipe places'],
         ['packages', 'Weekend rest pack'],
     ],
     'slug' => 'dovishram',
